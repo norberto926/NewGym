@@ -38,8 +38,8 @@ class Workout(models.Model):
     date = models.DateField(auto_now_add=True)
     sets = models.ManyToManyField(Set)
     start_of_workout = models.TimeField(auto_now_add=True)
-    end_of_workout = models.TimeField()
-    comments = models.TextField()
+    end_of_workout = models.TimeField(null=True)
+    comments = models.TextField(null=True)
     is_template = models.BooleanField(default=False)
 
 
