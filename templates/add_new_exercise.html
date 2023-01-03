@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new exercise</title>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Add exercise">
+</form>
+
+</body>
+</html>

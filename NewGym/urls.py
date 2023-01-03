@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from WorkoutTracker.views import AddNewExerciseView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('add_new_exercise', AddNewExerciseView.as_view()),
 ]
