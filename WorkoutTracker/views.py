@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, WorkoutForTemplateForm
-from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout
+from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate
 
 # Create your views here.
 
@@ -37,6 +37,21 @@ class AddNewWorkoutTemplateView(View):
             workout_template.workout = workout
             workout_template.save()
             return HttpResponse('Workout template created')
+
+
+class EditWorkoutTemplateView(View):
+
+    def get(self, request, workout_template_id):
+        workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
+        workout = workout_template.workout
+        set_dict = {}
+        for set in workout.sets:
+            if set.exercise in set_dict.keys():
+                set_dict[set.exercise].append(set)
+            else:
+                set_dict[set.exercise] = [set]
+        return render(request, 'edit_workout_template.html', {'workout_template': workout_template, 'set_dict': set_dict})
+
 
 
 
