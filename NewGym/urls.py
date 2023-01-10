@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from WorkoutTracker.views import AddNewExerciseView, AddNewWorkoutTemplateView
+from WorkoutTracker.views import AddNewExerciseView, AddNewWorkoutTemplateView, EditWorkoutTemplateView, \
+    AddExerciseToWorkoutTemplate, CreateWset
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('add_new_exercise', AddNewExerciseView.as_view()),
-    path('new_workout_template', AddNewWorkoutTemplateView.as_view())
+    path('new_workout_template', AddNewWorkoutTemplateView.as_view()),
+    path('edit_workout_template/<workout_template_id>', EditWorkoutTemplateView.as_view(), name="edit_workout_template"),
+    path('add_exercise_to_workout_template', AddExerciseToWorkoutTemplate.as_view()),
+    path('create_set/<exercise_id>', CreateWset.as_view(), name="create_set")
 ]

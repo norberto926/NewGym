@@ -1,5 +1,5 @@
 from django import forms
-from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate
+from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate, Wset
 
 
 class ExerciseForm(forms.ModelForm):
@@ -10,16 +10,22 @@ class ExerciseForm(forms.ModelForm):
         fields = '__all__'
 
 
-class WorkoutForTemplateForm(forms.ModelForm):
-    class Meta:
-        model = Workout
-        fields = ['comments']
-
-
 class WorkoutTemplateForm(forms.ModelForm):
     class Meta:
         model = WorkoutTemplate
         fields = ['name']
+
+
+class AddExerciseForm(forms.Form):
+    exercise = forms.ChoiceField(choices=Exercise.objects.all())
+
+
+class WsetForm(forms.ModelForm):
+    class Meta:
+        model = Wset
+        fields = ['repetitions']
+
+
 
 
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise list</title>
+</head>
+<body>
+<table>
+{% for exercise in exercise_list %}
+<tr>
+<td>{{exercise.name}}</td>
+<td>{{exercise.description}}</td>
+<td>{{exercise.main_muscle_group}}</td>
+<td>{{exercise.equipment_needed}}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

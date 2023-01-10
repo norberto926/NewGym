@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'NewGym.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': ['NewGym/templates', 'NewGym/WorkoutTracker']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -81,7 +81,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'new_gym_db',
+        'NAME': 'new_gym_db2',
 
         'USER': 'postgres',
 
