@@ -36,11 +36,16 @@ class Wset(models.Model):
     is_loaded = models.BooleanField(default=True)
     duration = models.IntegerField(null=True)
     created = models.DateTimeField(auto_now_add=True)
+    in_exercise_order = models.IntegerField(default=0)
+    in_workout_order = models.IntegerField(default=0)
 
 
 class WorkoutTemplate(models.Model):
     name = models.CharField(max_length=64)
     wsets = models.ManyToManyField(Wset)
+
+    def __str__(self):
+        return self.name
 
 
 class Workout(models.Model):
@@ -55,6 +60,8 @@ class Workout(models.Model):
 class WorkoutPlan(models.Model):
     name = models.CharField(max_length=64)
     workout_templates = models.ManyToManyField(WorkoutTemplate)
+    is_active = models.BooleanField(default=False)
+    
 
 
 

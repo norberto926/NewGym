@@ -4,8 +4,8 @@ from django.views import View
 from django_filters.views import FilterView
 
 from WorkoutTracker.filters import ExerciseFilter
-from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, WsetForm
-from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate
+from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, WsetForm, WorkoutPlanForm
+from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate, WorkoutPlan
 from WorkoutTracker.models import Wset
 from django.views.generic.list import ListView
 
@@ -33,8 +33,7 @@ class AddNewWorkoutTemplateView(View):
     def post(self, request):
         workout_template_form = WorkoutTemplateForm(request.POST)
         if workout_template_form.is_valid():
-            workout_template = workout_template_form.save(commit=False)
-            workout_template.save()
+            workout_template_form.save()
             return HttpResponse('Workout template created')
 
 
@@ -75,7 +74,7 @@ class AddExerciseToWorkoutTemplate(View):
         return redirect('create_set', exercise_id=exercise_id)
 
 
-class CreateWset(View):
+class CreateWsetforWorkoutTemplate(View):
 
     def get(self, request, exercise_id):
         wset_form = WsetForm()
@@ -91,14 +90,57 @@ class CreateWset(View):
         exercise = Exercise.objects.get(id=exercise_id)
         workout_template_id = int(request.session.get("workout_template_id"))
         if wset_form.is_valid():
+            workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
             new_wset = wset_form.save(commit=False)
             new_wset.exercise = Exercise.objects.get(id=exercise_id)
+            if workout_template.wsets.first():
+                last_wset_added_to_workout = workout_template.wsets.order_by('-in_workout_order')[0]
+                new_wset.in_workout_order = last_wset_added_to_workout.in_workout_order + 1
             new_wset.save()
-            workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
-            workout = workout_template.workout
-            workout.wsets.add(new_wset)
+            workout_template.wsets.add(new_wset)
             request.session["last_wset_repetition_number"] = new_wset.repetitions
         return redirect('edit_workout_template', workout_template_id=workout_template_id)
+
+
+class CreateWorkoutPlan(View):
+
+    def get(self, request):
+        form = WorkoutPlanForm()
+        ctx = {
+            'form': form
+        }
+        return render(request, 'create_workout_plan.html', {'ctx': ctx})
+
+    def post(self, request):
+        form = WorkoutPlanForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponse("Workout plan created")
+
+
+class MainPageView(View):
+    def get(self, request):
+        last_workout = Workout.objects.order_by('-date')[0]
+        last_workout_template = last_workout.workout_template
+
+
+class WorkoutPlanList(View):
+    def get(self, request):
+        workout_plan_list = WorkoutPlan.objects.all()
+        ctx = {
+            'workout_plan_list': workout_plan_list
+        }
+        return render(request, "workout_plan_list.html", ctx )
+
+    def post(self, request):
+        all_workout_plans = WorkoutPlan.objects.all()
+        for plan in all_workout_plans:
+            plan.is_active = False
+        workout_plan_id = request.POST.get('workout_plan_id')
+        workout_plan = WorkoutPlan.objects.get(id=workout_plan_id)
+        workout_plan.is_active = True
+        return redirect('workout_plan_list')
+
 
 
 

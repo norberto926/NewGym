@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create workout plan</title>
+</head>
+<body>
+    <button>Create new template</button>
+    <form method="POST">
+        {% csrf_token %}
+        {{ ctx.form }}
+        <button type="submit">Create plan</button>
+    </form>
+</body>
+</html>
