@@ -8,8 +8,7 @@
 {{ exercise }}
 <form method="POST">
     {% csrf_token %}
-    <input type="hidden" value="{{ exercise.id }}" name="exercise_id">
-    {{ wset_form }}
+    {{ set_form }}
     <button type="submit">Add set to workout</button>
 </form>
 </body>

@@ -7,9 +7,8 @@
 <body>
 <button><a href="/add_exercise_to_workout_template">Add exercise to template</a></button>
 <h1>{{ workout_template.name }}</h1>
-<h2>{{ workout_template.workout.comments }}</h2>
 <table>
-    {% for exercise, wsets in wset_dict.items %}
+    {% for exercise, sets in workout_dict.items %}
         <thead>
             <tr>
                 <th>{{ forloop.counter }}</th>
@@ -24,10 +23,10 @@
             </tr>
         </thead>
         <tbody>
-        {% for wset in wsets %}
+        {% for set in sets %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ wset.repetitions }}</td>
+                <td>{{ set.repetitions }}</td>
             </tr>
         {% endfor %}
         </tbody>
