@@ -8,7 +8,7 @@
     <button>Create new template</button>
     <form method="POST">
         {% csrf_token %}
-        {{ ctx.form }}
+        {{ ctx.workout_plan_form }}
         <button type="submit">Create plan</button>
     </form>
 </body>

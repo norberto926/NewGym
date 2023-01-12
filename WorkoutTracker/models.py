@@ -29,38 +29,45 @@ class Exercise(models.Model):
         return self.name
 
 
-class Wset(models.Model):
-    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
-    load = models.IntegerField(null=True)
-    repetitions = models.IntegerField()
-    is_loaded = models.BooleanField(default=True)
-    duration = models.IntegerField(null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    in_exercise_order = models.IntegerField(default=0)
-    in_workout_order = models.IntegerField(default=0)
-
-
 class WorkoutTemplate(models.Model):
-    name = models.CharField(max_length=64)
-    wsets = models.ManyToManyField(Wset)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
 
 
 class Workout(models.Model):
-    date = models.DateField(auto_now_add=True)
-    wsets = models.ManyToManyField(Wset)
-    start_of_workout = models.TimeField(auto_now_add=True)
-    end_of_workout = models.TimeField(null=True)
-    comments = models.TextField(null=True)
-    workout_template = models.ForeignKey(WorkoutTemplate, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    comment = models.TextField(null=True)
+    template = models.ForeignKey(WorkoutTemplate)
+    is_template = models.BooleanField(default=False)
+
+
+class Set(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
+    load = models.IntegerField(null=True)
+    repetitions = models.IntegerField()
+    is_loaded = models.BooleanField(default=True)
+    duration = models.IntegerField(null=True)
 
 
 class WorkoutPlan(models.Model):
     name = models.CharField(max_length=64)
-    workout_templates = models.ManyToManyField(WorkoutTemplate)
+    workout_templates = models.ManyToManyField(Workout, through='WorkoutPlanTemplates')
     is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
+class WorkoutPlanTemplates(models.Model):
+    template = models.ForeignKey(Workout)
+    plan = models.ForeignKey(WorkoutPlan)
+    order = models.IntegerField()
     
 
 
