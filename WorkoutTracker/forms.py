@@ -11,9 +11,9 @@ class ExerciseForm(forms.ModelForm):
         fields = '__all__'
 
 
-class WorkoutTemplateForm(forms.ModelForm):
+class WorkoutTemplateForm(forms.Form):
     class Meta:
-        model = Workout
+        model = WorkoutTemplate
         fields = ['name']
 
 
@@ -27,13 +27,15 @@ class SetFormWorkoutTemplate(forms.ModelForm):
         fields = ['repetitions']
 
 
-class WorkoutPlanForm(forms.ModelForm):
+class WorkoutPlanForm(forms.Form):
+    name = forms.CharField(max_length=64)
     workout_templates = forms.ModelMultipleChoiceField(queryset=WorkoutTemplate.objects.all(),
                                                        widget=forms.CheckboxSelectMultiple)
 
-    class Meta:
-        model = WorkoutPlan
-        fields = '__all__'
+
+
+
+
 
 
 

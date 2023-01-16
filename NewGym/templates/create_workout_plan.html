@@ -5,7 +5,7 @@
     <title>Create workout plan</title>
 </head>
 <body>
-    <button>Create new template</button>
+<button><a href="/create_workout_template">Create new template</a></button>
     <form method="POST">
         {% csrf_token %}
         {{ ctx.workout_plan_form }}

@@ -15,16 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from WorkoutTracker.views import AddNewExerciseView, AddNewWorkoutTemplateView, EditWorkoutTemplateView, \
-    AddExerciseToWorkoutTemplate, CreateSetforWorkoutTemplate, CreateWorkoutPlan, WorkoutPlanList
+from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, EditWorkoutTemplate, \
+    AddExerciseToWorkoutTemplate, CreateSetForWorkoutTemplate, CreateWorkoutPlan, WorkoutPlanList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('add_new_exercise', AddNewExerciseView.as_view()),
-    path('new_workout_template', AddNewWorkoutTemplateView.as_view()),
-    path('edit_workout_template/<workout_template_id>', EditWorkoutTemplateView.as_view(), name="edit_workout_template"),
-    path('add_exercise_to_workout_template', AddExerciseToWorkoutTemplate.as_view()),
-    path('create_set', CreateSetforWorkoutTemplate.as_view(), name="create_set"),
-    path('create_workout_plan', CreateWorkoutPlan.as_view()),
+    path('create_exercise', CreateExercise.as_view(), name='create_exercise'),
+    path('create_workout_template', CreateWorkoutTemplate.as_view(), name='create_workout_template'),
+    path('edit_workout_template/<workout_template_id>', EditWorkoutTemplate.as_view(), name="edit_workout_template"),
+    path('add_exercise_to_workout_template', AddExerciseToWorkoutTemplate.as_view(), name='add_exercise_to_workout_template'),
+    path('create_set', CreateSetForWorkoutTemplate.as_view(), name="create_set"),
+    path('create_workout_plan', CreateWorkoutPlan.as_view(), name='create_workout_plan'),
     path('workout_plan_list', WorkoutPlanList.as_view(), name='workout_plan_list'),
 ]

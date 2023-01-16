@@ -11,12 +11,12 @@
     {% for exercise, sets in workout_dict.items %}
         <thead>
             <tr>
-                <th>{{ forloop.counter }}</th>
-                <th>{{ exercise }}</th>
+                <th>{{ workout_exercise.order }}</th>
+                <th>{{ workout_exercise.exercise }}</th>
                 <th>
                     <form method="POST">
                         {% csrf_token %}
-                        <input type="hidden" value="{{ exercise.id }}" name="exercise_id">
+                        <input type="hidden" value="{{ workout_exercise.id }}" name="workout_exercise_id">
                         <button type="submit" >Add Set</button>
                     </form>
                 </th>
@@ -25,7 +25,7 @@
         <tbody>
         {% for set in sets %}
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <td>{{ set.order }}</td>
                 <td>{{ set.repetitions }}</td>
             </tr>
         {% endfor %}
@@ -34,6 +34,7 @@
 
     {% endfor %}
 </table>
+<button><a href="/create_workout_plan">Done</a></button>
 
 </body>
 </html>
