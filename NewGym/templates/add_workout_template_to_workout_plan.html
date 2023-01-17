@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for workout_template in all_templates %}
+       {{  workout_template.name  }}
+        <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="workout_template_id" value="{{ workout_template.id }}">
+        <button type="submit">Add template</button>
+        </form>
+    {% endfor %}
+</body>
+</html>

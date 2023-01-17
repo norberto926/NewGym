@@ -134,12 +134,13 @@ class CreateWorkoutPlan(View):
         return render(request, 'create_workout_plan.html', {'ctx': ctx})
 
     def post(self, request):
-        workout_plan_form = WorkoutPlanForm(request.POST)
-        if workout_plan_form.is_valid():
-            name = workout_plan_form.cleaned_data['name']
+        form = WorkoutPlanForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
             new_workout_plan = WorkoutPlan.objects.create(name=name)
 
-        return redirect('edit_workout_plan', workout_plan_id=new_workout_plan.id)
+            return redirect('edit_workout_plan', workout_plan_id=new_workout_plan.id)
+
 
 class EditWorkoutPlan(View):
     def get(self, request, workout_plan_id):
@@ -149,11 +150,28 @@ class EditWorkoutPlan(View):
 
     def post(self, request, workout_plan_id):
         workout_plan = WorkoutPlan.objects.get(workout_plan_id)
+        return redirect('add_workout_template_to_workout_plan')
+
 
 class AddWorkoutTemplateToWorkoutPlan(View):
     def get(self, request):
         all_templates = WorkoutTemplate.objects.all().order_by()
         return render(request, 'add_workout_template_to_workout_plan.html', {'all_templates': all_templates})
+
+    def post(self, request):
+        workout_plan_id = request.session.get('workout_plan_id')
+        workout_plan = WorkoutPlan.objects.get(id=workout_plan_id)
+        workout_template_id = request.POST.get('workout_template_id')
+        workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
+        templates_in_plan = WorkoutPlanTemplates.objects.filter(plan=workout_plan)
+        if templates_in_plan:
+            new_workout_plan_template = WorkoutPlanTemplates.objects.create(plan=workout_plan, template=workout_template,
+                                                                            order=len(templates_in_plan) + 1)
+        else:
+            new_workout_plan_template = WorkoutPlanTemplates.objects.create(plan=workout_plan, template=workout_template,
+                                                                            order=1)
+
+        return redirect('edit-workout-plan', id=workout_plan_id)
 
 
 class MainPageView(View):

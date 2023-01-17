@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, EditWorkoutTemplate, \
-    AddExerciseToWorkoutTemplate, CreateSetForWorkoutExercise, CreateWorkoutPlan, WorkoutPlanList, EditWorkoutPlan
+    AddExerciseToWorkoutTemplate, CreateSetForWorkoutExercise, CreateWorkoutPlan, WorkoutPlanList, EditWorkoutPlan, \
+    AddWorkoutTemplateToWorkoutPlan
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +29,5 @@ urlpatterns = [
     path('create_workout_plan', CreateWorkoutPlan.as_view(), name='create_workout_plan'),
     path('workout_plan_list', WorkoutPlanList.as_view(), name='workout_plan_list'),
     path('edit_workout_plan/<int:workout_plan_id>', EditWorkoutPlan.as_view(), name='edit_workout_plan'),
+    path('add_workout_template_to_workout_plan', AddWorkoutTemplateToWorkoutPlan.as_view(), name='add_workout_template_to_workout_plan')
 ]
