@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {{ workout_plan.name }}
+{% if workout_plan.is_active == True %}
+    Active
+{% endif %}
+{% for workout_template in workout_plan_workout_plan_templates_set %}
+    {{workout_template.name}}
+{% endfor %}
+</body>
+</html>

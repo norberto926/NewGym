@@ -8,7 +8,7 @@
 <button><a href="/add_exercise_to_workout_template">Add exercise to template</a></button>
 <h1>{{ workout_template.name }}</h1>
 <table>
-    {% for exercise, sets in workout_dict.items %}
+    {% for workout_exercise, sets in set_dict.items %}
         <thead>
             <tr>
                 <th>{{ workout_exercise.order }}</th>
