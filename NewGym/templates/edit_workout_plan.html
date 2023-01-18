@@ -7,11 +7,15 @@
 <body>
     {{ workout_plan.name }}
 {% if workout_plan.is_active == True %}
-    Active
+    <p>Active</p>
 {% endif %}
-{% for workout_template in workout_plan_workout_plan_templates_set %}
-    {{workout_template.name}}
+    <ul>
+{% for workout_plan_template in workout_plan.workoutplantemplates_set.all %}
+    <li>{{ workout_plan_template.order }}. {{workout_plan_template.template}}</li>
 {% endfor %}
+    </ul>
 <button><a href="/add_workout_template_to_workout_plan">Add a template</a></button>
+<button><a href="/workout_plan_list">Done</a></button>
+
 </body>
 </html>

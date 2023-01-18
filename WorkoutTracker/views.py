@@ -145,7 +145,7 @@ class CreateWorkoutPlan(View):
 class EditWorkoutPlan(View):
     def get(self, request, workout_plan_id):
         workout_plan = WorkoutPlan.objects.get(id=workout_plan_id)
-        request.session[workout_plan_id] = workout_plan_id
+        request.session['workout_plan_id'] = workout_plan_id
         return render(request, 'edit_workout_plan.html', {'workout_plan': workout_plan})
 
     def post(self, request, workout_plan_id):
@@ -155,7 +155,7 @@ class EditWorkoutPlan(View):
 
 class AddWorkoutTemplateToWorkoutPlan(View):
     def get(self, request):
-        all_templates = WorkoutTemplate.objects.all().order_by()
+        all_templates = WorkoutTemplate.objects.all()
         return render(request, 'add_workout_template_to_workout_plan.html', {'all_templates': all_templates})
 
     def post(self, request):
@@ -171,7 +171,7 @@ class AddWorkoutTemplateToWorkoutPlan(View):
             new_workout_plan_template = WorkoutPlanTemplates.objects.create(plan=workout_plan, template=workout_template,
                                                                             order=1)
 
-        return redirect('edit-workout-plan', id=workout_plan_id)
+        return redirect('edit_workout_plan', workout_plan_id=workout_plan_id)
 
 
 class MainPageView(View):
@@ -188,19 +188,21 @@ class MainPageView(View):
 class WorkoutPlanList(View):
 
     def get(self, request):
-        workout_plan_list = WorkoutPlan.objects.all()
+        workout_plan_list = WorkoutPlan.objects.all().order_by('-created')
         ctx = {
             'workout_plan_list': workout_plan_list
         }
         return render(request, "workout_plan_list.html", ctx)
 
     def post(self, request):
-        all_workout_plans = WorkoutPlan.objects.all()
-        for plan in all_workout_plans:
-            plan.is_active = False
-        workout_plan_id = request.POST.get('workout_plan_id')
+        all_workout_plans = WorkoutPlan.objects.all().order_by('-created')
+        for workout_plan in all_workout_plans:
+            workout_plan.is_active = False
+            workout_plan.save()
+        workout_plan_id = int(request.POST.get('workout_plan_id'))
         workout_plan = WorkoutPlan.objects.get(id=workout_plan_id)
         workout_plan.is_active = True
+        workout_plan.save()
         return redirect('workout_plan_list')
 
 

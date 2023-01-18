@@ -7,14 +7,15 @@
 <body>
     {% for workout_plan in workout_plan_list %}
         {{ workout_plan.name }}
-        {% if workout_plan.is_active is True %}
-            active
+        {% if workout_plan.is_active == True %}
+            <p></p>active
         {% endif %}
         <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="workout_plan_id" value="{{ workout_plan.id }}">
             <button type="submit">Set as active</button>
         </form>
+        <button><a href="/edit_workout_plan/{{ workout_plan.id }}">Edit </a></button>
     {% endfor %}
 </body>
 </html>

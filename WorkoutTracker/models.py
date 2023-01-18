@@ -31,6 +31,8 @@ class Exercise(models.Model):
 
 class WorkoutTemplate(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -51,6 +53,8 @@ class WorkoutExercise(models.Model):
 
 
 class Set(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     workout_exercise = models.ForeignKey(WorkoutExercise, on_delete=models.CASCADE)
     load = models.IntegerField(null=True)
     repetitions = models.IntegerField()
@@ -60,8 +64,10 @@ class Set(models.Model):
 
 
 class WorkoutPlan(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=64)
-    workout_templates = models.ManyToManyField(Workout, through='WorkoutPlanTemplates')
+    workout_templates = models.ManyToManyField(WorkoutTemplate, through='WorkoutPlanTemplates')
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
@@ -69,7 +75,7 @@ class WorkoutPlan(models.Model):
 
 
 class WorkoutPlanTemplates(models.Model):
-    template = models.ForeignKey(Workout, on_delete=models.CASCADE)
+    template = models.ForeignKey(WorkoutTemplate, on_delete=models.CASCADE)
     plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE)
     order = models.IntegerField()
     
