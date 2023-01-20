@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from WorkoutTracker.filters import ExerciseFilter
-from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, WorkoutPlanForm
+from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, WorkoutPlanForm, \
+    CreateSetForWorkoutForm
 from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutPlan, WorkoutTemplate, \
     WorkoutPlanTemplates, Set, WorkoutExercise
 
@@ -204,6 +205,30 @@ class WorkoutPlanList(View):
         workout_plan.is_active = True
         workout_plan.save()
         return redirect('workout_plan_list')
+
+
+class CreateNewWorkout(View):
+
+    def get(self, request, workout_template_id):
+        workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
+        workout_base = Workout.objects.get(template=workout_template).order('-created')[0]
+        new_workout = Workout.objects.create(template=workout_template)
+        order = 1
+        return redirect('create_workout_exercise_for_workout', new_workout_id=new_workout.id, workout_base=workout_base.id, order=1)
+
+class CreateWorkoutExerciseForWorkout(View):
+
+    def get(self, request, workout_base_id, new_workout_id, order):
+        workout_base = Workout.objects.get(id=workout_base_id)
+        workout_base_exercise = WorkoutExercise.objects.get(workout=workout_base, order=order)
+        new_workout = Workout.objects.get(id=new_workout_id)
+        new_workout_exercise = WorkoutExercise.objects.create(workout=new_workout, exercise=workout_base_exercise.exercise, order=order)
+        return redirect('create_set_for_workout_exercise_for_workout', workout_base_id=workout_base_id, workout_exercise_id=new_workout_exercise)
+
+
+
+
+
 
 
 

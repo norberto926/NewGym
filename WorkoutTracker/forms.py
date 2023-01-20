@@ -28,7 +28,10 @@ class SetFormWorkoutTemplate(forms.ModelForm):
 
 
 class WorkoutPlanForm(forms.Form):
-    name = forms.CharField(max_length=64)
+    name = forms.CharField(max_length=64)\
+
+class CreateSetForWorkoutForm(forms.Form):
+    ...
 
 
 
