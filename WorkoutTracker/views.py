@@ -213,17 +213,25 @@ class CreateNewWorkout(View):
         workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
         workout_base = Workout.objects.get(template=workout_template).order('-created')[0]
         new_workout = Workout.objects.create(template=workout_template)
-        order = 1
-        return redirect('create_workout_exercise_for_workout', new_workout_id=new_workout.id, workout_base=workout_base.id, order=1)
+        exercise_order = 1
+        return redirect('create_workout_exercise_for_workout', new_workout_id=new_workout.id, workout_base=workout_base.id, exercise_order=1)
 
 class CreateWorkoutExerciseForWorkout(View):
 
-    def get(self, request, workout_base_id, new_workout_id, order):
+    def get(self, request, workout_base_id, new_workout_id, exercise_order):
         workout_base = Workout.objects.get(id=workout_base_id)
-        workout_base_exercise = WorkoutExercise.objects.get(workout=workout_base, order=order)
+        workout_base_exercise = WorkoutExercise.objects.get(workout=workout_base, order=exercise_order)
         new_workout = Workout.objects.get(id=new_workout_id)
-        new_workout_exercise = WorkoutExercise.objects.create(workout=new_workout, exercise=workout_base_exercise.exercise, order=order)
-        return redirect('create_set_for_workout_exercise_for_workout', workout_base_id=workout_base_id, workout_exercise_id=new_workout_exercise)
+        new_workout_exercise = WorkoutExercise.objects.create(workout=new_workout, exercise=workout_base_exercise.exercise, order=exercise_order)
+        set_order = 1
+        return redirect('create_set_for_workout_exercise_for_workout', workout_base_id=workout_base_id, workout_exercise_id=new_workout_exercise, set_order=set_order)
+
+
+class CreateSetForWorkoutExerciseForWorkout(View):
+    def get(self, request, workout_base_id, workout_exercise_id, set_order):
+        workout_base = Workout.objects.get(id=workout_base_id)
+        workout_exercise = WorkoutExercise.objects.get(id=workout_exercise_id)
+        form = CreateSetForWorkoutExerciseForWorkoutForm()
 
 
 
