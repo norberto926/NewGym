@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit workout</title>
+</head>
+<body>
+
+<h1>{{ workout.template.name }}</h1>
+<h1>{{ workout.created }}</h1>
+<table>
+    {% for workout_exercise, sets in set_dict.items %}
+        <thead>
+            <tr>
+                <th>{{ workout_exercise.order }}</th>
+                <th>{{ workout_exercise.exercise }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for set in sets %}
+            <tr>
+                <td>{{ set.order }}</td>
+                <td>{{ set.repetitions }}</td>
+                <td>{{ set.load }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    {% endfor %}
+</table>
+
+
+</body>
+</html>

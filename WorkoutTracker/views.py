@@ -4,32 +4,33 @@ from django.views import View
 
 from WorkoutTracker.filters import ExerciseFilter
 from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, WorkoutPlanForm, \
-    CreateSetForWorkoutForm
+    CreateSetForWorkoutExerciseForWorkoutForm
 from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutPlan, WorkoutTemplate, \
     WorkoutPlanTemplates, Set, WorkoutExercise
 
 # Create your views here.
+def progression_calc(workout_base_set, set_order, ):
+    if int(set_order) == 1:
+        workout_template = workout_base_set.workout_exercise.workout.template # do this or pass a parameter
+        workout_template_workout = Workout.objects.get(template=workout_template, is_template=True)
 
 
-def display_workout(workout):
-    sets = Set.objects.filter(workout=workout)
-    workout_dict = {}
-    for set in sets:
-        if set.exercise in workout_dict.keys():
-            workout_dict[set.exercise].append(set)
-        else:
-            workout_dict[set.exercise] = [set]
-    for element in workout_dict.items():
-        element[1].sort(key=lambda x: x.created)
-    return workout_dict
+
+
+def create_workout_display(workout):
+    workout_exercises = WorkoutExercise.objects.filter(workout=workout).order_by('order')
+    set_dict = {}
+    for workout_exercise in workout_exercises:
+        set_dict[workout_exercise] = Set.objects.filter(workout_exercise=workout_exercise).order_by('order')
+    return set_dict
 
 
 class CreateExercise(View):
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         form = ExerciseForm()
         return render(request, "create_exercise.html", {"form": form})
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         exercise_form = ExerciseForm(request.POST)
         if exercise_form.is_valid():
             exercise_form.save()
@@ -177,13 +178,25 @@ class AddWorkoutTemplateToWorkoutPlan(View):
 
 class MainPageView(View):
     def get(self, request):
-        last_workout = Workout.objects.order_by('-date')[0]
+        last_workout = Workout.objects.order_by('-created')[0]
         active_plan = WorkoutPlan.objects.get(is_active=True)
         order_in_plan_of_last_workout = WorkoutPlanTemplates.objects.get(template=last_workout.template, plan=active_plan).order
-        # need to add back to first template condition
-        next_workout_template = WorkoutPlanTemplates.objects.get(order=order_in_plan_of_last_workout + 1).template
-        last_workout_with_next_workout_template = Workout.objects.filter(template=next_workout_template).order_by('-created')[0]
-        request.session['last_workout_with_next_workout_template'] = last_workout_with_next_workout_template
+        all_templates_in_plan = WorkoutPlanTemplates.objects.filter(plan=active_plan).order_by('order')
+        if order_in_plan_of_last_workout == all_templates_in_plan.last().order:
+            next_workout_template = WorkoutPlanTemplates.objects.get(order=1, plan=active_plan).template
+        else:
+            next_workout_template = WorkoutPlanTemplates.objects.get(order=order_in_plan_of_last_workout + 1, plan=active_plan).template
+        next_workout = Workout.objects.get(template=next_workout_template, is_template=True)
+        request.session['workout_base_template_id'] = next_workout_template.id
+        ctx = {
+            'last_workout_dict': create_workout_display(last_workout),
+            'last_workout': last_workout,
+            'next_workout_dict': create_workout_display(next_workout),
+            'next_workout': next_workout,
+            'active_plan': active_plan
+
+        }
+        return render(request, 'main.html', ctx)
 
 
 class WorkoutPlanList(View):
@@ -209,29 +222,81 @@ class WorkoutPlanList(View):
 
 class CreateNewWorkout(View):
 
-    def get(self, request, workout_template_id):
+    def get(self, request):
+        workout_template_id = int(request.session.get('workout_base_template_id'))
         workout_template = WorkoutTemplate.objects.get(id=workout_template_id)
-        workout_base = Workout.objects.get(template=workout_template).order('-created')[0]
+        workout_base = Workout.objects.filter(template=workout_template).order_by('-created')[0]
+        workout_base_exercises = WorkoutExercise.objects.filter(workout=workout_base)
         new_workout = Workout.objects.create(template=workout_template)
         exercise_order = 1
-        return redirect('create_workout_exercise_for_workout', new_workout_id=new_workout.id, workout_base=workout_base.id, exercise_order=1)
+        return redirect('create_workout_exercise_for_workout', new_workout_id=new_workout.id, workout_base_id=workout_base.id, exercise_order=1)
+
 
 class CreateWorkoutExerciseForWorkout(View):
 
-    def get(self, request, workout_base_id, new_workout_id, exercise_order):
+    def get(self, request, new_workout_id, workout_base_id, exercise_order):
         workout_base = Workout.objects.get(id=workout_base_id)
         workout_base_exercise = WorkoutExercise.objects.get(workout=workout_base, order=exercise_order)
         new_workout = Workout.objects.get(id=new_workout_id)
         new_workout_exercise = WorkoutExercise.objects.create(workout=new_workout, exercise=workout_base_exercise.exercise, order=exercise_order)
         set_order = 1
-        return redirect('create_set_for_workout_exercise_for_workout', workout_base_id=workout_base_id, workout_exercise_id=new_workout_exercise, set_order=set_order)
+        return redirect('create_set_for_workout_exercise_for_workout', workout_base_exercise_id=workout_base_exercise.id, workout_exercise_id=new_workout_exercise.id, set_order=set_order)
 
 
 class CreateSetForWorkoutExerciseForWorkout(View):
-    def get(self, request, workout_base_id, workout_exercise_id, set_order):
-        workout_base = Workout.objects.get(id=workout_base_id)
+    def get(self, request, workout_base_exercise_id, workout_exercise_id, set_order):
+        workout_base_exercise = WorkoutExercise.objects.get(id=workout_base_exercise_id)
+        workout_base_set = Set.objects.get(workout_exercise=workout_base_exercise, order=set_order)
         workout_exercise = WorkoutExercise.objects.get(id=workout_exercise_id)
-        form = CreateSetForWorkoutExerciseForWorkoutForm()
+        form = CreateSetForWorkoutExerciseForWorkoutForm(initial={'load': workout_base_set.load,
+                                                                  'repetitions': workout_base_set.repetitions})
+
+        return render(request, 'create_set_for_workout_exercise_for_workout.html', {'form': form, 'workout_exercise': workout_exercise})
+
+    def post(self, request, workout_base_exercise_id, workout_exercise_id, set_order):
+        form = CreateSetForWorkoutExerciseForWorkoutForm(request.POST)
+        if form.is_valid():
+            load = form.cleaned_data['load']
+            repetitions = form.cleaned_data['repetitions']
+            workout_exercise = WorkoutExercise.objects.get(id=workout_exercise_id)
+            new_set = Set.objects.create(workout_exercise=workout_exercise, load=load, repetitions=repetitions, order=set_order)
+            workout_base_exercise = WorkoutExercise.objects.get(id=workout_base_exercise_id)
+            workout_base_exercise_sets = Set.objects.filter(workout_exercise=workout_base_exercise).order_by('order')
+            if workout_base_exercise_sets.last().order == int(set_order):
+                workout_base_exercises = WorkoutExercise.objects.filter(workout=workout_base_exercise.workout).order_by('order')
+                if workout_base_exercises.last().order == workout_base_exercise.order:
+                    return redirect('edit_workout', workout_id=workout_exercise.workout.id)
+                else:
+                    return redirect('create_workout_exercise_for_workout', workout_base_id=workout_base_exercise.workout.id,
+                                    new_workout_id=workout_exercise.workout.id, exercise_order=workout_exercise.order + 1)
+            else:
+                return redirect('create_set_for_workout_exercise_for_workout', workout_base_exercise_id=workout_base_exercise_id,
+                         workout_exercise_id=workout_exercise_id, set_order=int(set_order) + 1)
+
+
+class EditWorkout(View):
+
+    def get(self, request, workout_id):
+        workout = Workout.objects.get(id=workout_id)
+        workout_exercises = WorkoutExercise.objects.filter(workout=workout).order_by('order')
+        set_dict = {}
+        for workout_exercise in workout_exercises:
+            set_dict[workout_exercise] = Set.objects.filter(workout_exercise=workout_exercise).order_by('order')
+
+        ctx = {'workout': workout,
+               'set_dict': set_dict
+               }
+        return render(request, 'edit_workout.html', ctx)
+
+
+
+                    
+
+
+
+
+
+
 
 
 

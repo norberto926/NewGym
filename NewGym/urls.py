@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, EditWorkoutTemplate, \
     AddExerciseToWorkoutTemplate, CreateSetForWorkoutExercise, CreateWorkoutPlan, WorkoutPlanList, EditWorkoutPlan, \
-    AddWorkoutTemplateToWorkoutPlan
+    AddWorkoutTemplateToWorkoutPlan, CreateNewWorkout, CreateWorkoutExerciseForWorkout, \
+    CreateSetForWorkoutExerciseForWorkout, EditWorkout, MainPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +30,10 @@ urlpatterns = [
     path('create_workout_plan', CreateWorkoutPlan.as_view(), name='create_workout_plan'),
     path('workout_plan_list', WorkoutPlanList.as_view(), name='workout_plan_list'),
     path('edit_workout_plan/<int:workout_plan_id>', EditWorkoutPlan.as_view(), name='edit_workout_plan'),
-    path('add_workout_template_to_workout_plan', AddWorkoutTemplateToWorkoutPlan.as_view(), name='add_workout_template_to_workout_plan')
+    path('add_workout_template_to_workout_plan', AddWorkoutTemplateToWorkoutPlan.as_view(), name='add_workout_template_to_workout_plan'),
+    path('create_new_workout', CreateNewWorkout.as_view(), name='create_new_workout'),
+    path('create_workout_exercise_for_workout/<new_workout_id>/<workout_base_id>/<exercise_order>', CreateWorkoutExerciseForWorkout.as_view(), name='create_workout_exercise_for_workout'),
+    path('create_set_for_workout_exercise_for_workout/<workout_base_exercise_id>/<workout_exercise_id>/<set_order>', CreateSetForWorkoutExerciseForWorkout.as_view(), name='create_set_for_workout_exercise_for_workout'),
+    path('edit_workout/<workout_id>', EditWorkout.as_view(), name='edit_workout'),
+    path('main', MainPageView.as_view(), name='main_page')
 ]
