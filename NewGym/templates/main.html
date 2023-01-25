@@ -1,7 +1,8 @@
+{% load static %}
+{% block head %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block head %}
     <meta charset="UTF-8">
         {% block title %}
         <title>New Gym</title>
@@ -9,7 +10,7 @@
         {% block style %}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <link href="styles.css" rel="stylesheet">
+        <link href="NewGym/templates/styles.css" rel="stylesheet">
         {% endblock %}
     {% endblock %}
 </head>
@@ -42,25 +43,29 @@
   </div>
 </nav>
 {% endblock %}
-<section class="bg-dark text-light p-2 text-center">
-<div class="container-fluid border-5 rounded-4 bg-dark text-light p-5 my-5 mx-2">
+{% block content %}
+<section class="bg-dark p-2 text-center">
+<div class="container-fluid border-5 rounded-4 bg-dark p-5 my-5 mx-2">
 <div class="row">
-    <div class="container rounded-4 p-2">
+    <div class="container bg-dark-subtle text-dark rounded-2 p-2">
     <h2>Active workout plan: {{ active_plan.name }}</h2>
 
 </div>
   <div class="row">
-  <div class="col m-5">
+  <div class="col my-5">
     <div class ="container">
+    <div class="card border-dark-subtle">
+    <div class="card-header bg-dark-subtle">
         <h2>Last workout</h2>
         <h3>Template: {{ last_workout.template.name }}</h3>
-        <h3>{{ last_workout.created|date:'Y-m-d' }}</h3>
-        <div class="accordion" id="last_workout">
+    </div>
+    <div class="card-body">
+        <div class="accordion py-3" id="last_workout">
         {% for workout_exercise, sets in last_workout_dict.items %}
           <div class="accordion-item">
             <h2 class="accordion-header" id="heading{{ forloop.counter }}"></h2>
               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#exercise-{{ forloop.counter }}" aria-expanded="true" aria-controls="exercise-{{ forloop.counter }}">
-                  {{ forloop.counter }}. {{ workout_exercise.exercise }}
+                  {{ forloop.counter }}. {{ workout_exercise.exercise|upper }}
               </button>
            </h2>
            <div id="exercise-{{ forloop.counter }}" class="accordion-collapse collapse", aria-labelledby="heading{{ forloop.counter }}"
@@ -77,12 +82,17 @@
         {% endfor %}
         </div>
     </div>
+    </div>
+    </div>
   </div>
-  <div class="col m-5">
-    <div>
+  <div class="col my-5">
+    <div class="card border-dark-subtle">
+      <div class="card-header bg bg-dark-subtle">
         <h2>Next workout</h2>
         <h3>Template: {{ next_workout.template.name }}</h3>
-        <div class="accordion" id="next_workout">
+      </div>
+    <div class="card-body">
+        <div class="accordion py-3" id="next_workout">
         {% for workout_exercise, sets in next_workout_dict.items %}
           <div class="accordion-item">
             <h2 class="accordion-header" id="heading{{ forloop.counter }}"></h2>
@@ -92,7 +102,7 @@
            </h2>
            <div id="next_workout_exercise-{{ forloop.counter }}" class="accordion-collapse collapse", aria-labelledby="heading{{ forloop.counter }}"
                 data-bs-parent="#next_workout">
-             <div class="accordion-body">
+             <div class="accordion-body text-start">
                <ul>
                    {% for set in sets %}
                        <li> Set {{ set.order }}  <br> {{ set.repetitions }} reps</li>
@@ -101,13 +111,16 @@
              </div>`
             </div>
           </div>
+
         {% endfor %}
         </div>
+    </div>
     </div>
   </div>
   </div>
 </div>
 </section>
+{% endblock %}
 
 
 {% block script %}

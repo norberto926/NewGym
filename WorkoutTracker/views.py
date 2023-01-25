@@ -8,11 +8,24 @@ from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorko
 from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutPlan, WorkoutTemplate, \
     WorkoutPlanTemplates, Set, WorkoutExercise
 
+
+
 # Create your views here.
-def progression_calc(workout_base_set, set_order, ):
+
+
+def progression_calc(workout_base_set, workout_exercise, set_order):
     if int(set_order) == 1:
         workout_template = workout_base_set.workout_exercise.workout.template # do this or pass a parameter
-        workout_template_workout = Workout.objects.get(template=workout_template, is_template=True)
+        workout_for_workout_template = Workout.objects.get(template=workout_template, is_template=True)
+        workout_exercise_for_workout = WorkoutExercise.objects.get(workout=workout_for_workout_template, order=workout_base_set.workout_exercise.order)
+        template_set = Set.objects.get(workout_exercise=workout_exercise_for_workout, order=1)
+        if workout_base_set.repetitions == template_set.repetitions:
+            return workout_base_set.load + 5, workout_base_set.repetitions
+        else:
+            return workout_base_set.load, template_set.repetitions
+    else:
+        ...
+
 
 
 
