@@ -8,9 +8,24 @@
         <title>New Gym</title>
         {% endblock  %}
         {% block style %}
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <link href="NewGym/templates/styles.css" rel="stylesheet">
+            <!-- Font Awesome -->
+            <link
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+              rel="stylesheet"
+            />
+            <!-- Google Fonts -->
+            <link
+              href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+              rel="stylesheet"
+            />
+            <!-- MDB -->
+            <link
+              href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css"
+              rel="stylesheet"
+            />
+            <link
+
+            />
         {% endblock %}
     {% endblock %}
 </head>
@@ -18,10 +33,10 @@
 <body>
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">NEW GYM</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -44,71 +59,148 @@
 </nav>
 {% endblock %}
 {% block content %}
-<section class="bg-dark p-2 text-center">
-<div class="container-fluid border-5 rounded-4 bg-dark p-5 my-5 mx-2">
-<div class="row">
-    <div class="container bg-dark-subtle text-dark rounded-2 p-2">
-    <h2>Active workout plan: {{ active_plan.name }}</h2>
+<section class="bg-danger text-light">
+<div class="container-fluid py-5">
 
-</div>
-  <div class="row">
-  <div class="col my-5">
-    <div class ="container">
-    <div class="card border-dark-subtle">
-    <div class="card-header bg-dark-subtle">
-        <h2>Last workout</h2>
-        <h3>Template: {{ last_workout.template.name }}</h3>
-    </div>
-    <div class="card-body">
-        <div class="accordion py-3" id="last_workout">
-        {% for workout_exercise, sets in last_workout_dict.items %}
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="heading{{ forloop.counter }}"></h2>
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#exercise-{{ forloop.counter }}" aria-expanded="true" aria-controls="exercise-{{ forloop.counter }}">
-                  {{ forloop.counter }}. {{ workout_exercise.exercise|upper }}
-              </button>
-           </h2>
-           <div id="exercise-{{ forloop.counter }}" class="accordion-collapse collapse", aria-labelledby="heading{{ forloop.counter }}"
-                data-bs-parent="#last_workout">
-             <div class="accordion-body text-start">
-               <ul>
-                   {% for set in sets %}
-                       <li> Set {{ set.order }}  <br> {{ set.repetitions }} reps {{ set.load }} kg</li>
-                   {% endfor %}
-               </ul>
-             </div>`
+<div class="row justify-content-between">
+  <div class="col-sm-6 mt-5 p-5">
+    <div class="container-fluid">
+        <div id="workout_details">
+            <div class="row" style="border: black solid 1px">
+
+                    Template: {{ last_workout.template.name }}
+
             </div>
-          </div>
-        {% endfor %}
+            <div class="row justify-content-between pt-3" style="border: black solid 1px">
+                <div class="col-3">
+                    <div class="col">
+                        <div class="row justify-content-start">
+                            <div class="col-3 align-self-center">
+                                <i class="fa-solid fa-calendar-days fa-2xl"></i>
+                            </div>
+                            <div class="col-5">
+                                    {{ last_workout.created|date:"d M Y" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-4 align-self-center">
+                                <i class="fa-solid fa-dumbbell fa-2xl"></i>
+                            </div>
+                            <div class="col-5">
+                                <div class="row">
+                                    Exercises
+                                </div>
+                                <div class="row">
+                                    {{ last_workout_dict.items|length }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-4 align-self-center">
+                                <i class="fa-solid fa-bars fa-2xl"></i>
+                            </div>
+                            <div class="col-5">
+                                <div class="row">
+                                    Sets
+                                </div>
+                                <div class="row">
+                                    {{ last_workout_totals.0 }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-3" >
+                <div class="col">
+                    <i class="fa-solid fa-arrows-rotate fa-2xl"></i>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        Repetitions
+                    </div>
+                    <div class="row">
+                        {{ last_workout_totals.1 }}
+                    </div>
+                </div>
+                <div class="col">
+                    <i class="fa-solid fa-weight-hanging fa-2xl"></i>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        Total load
+                    </div>
+                    <div class="row">
+                        {{ last_workout_totals.2 }} kg
+                    </div>
+                </div>
+            </div>
         </div>
+    <div class="container-fluid" id="workout_display" style="border: black solid 1px">
+        {% for workout_exercise, sets in last_workout_dict.items %}
+            <div class="row">
+                {{ workout_exercise.exercise }}
+            </div>
+            <div class="row">
+                Sets
+            </div>
+            {% for set in sets %}
+                <div class="row">
+                    <div class="col">
+                        {{ forloop.counter }}
+                    </div>
+                    <div class="col">
+                        Load: {{ set.load }} kg
+                    </div>
+                    <div class="col">
+                        Repetitions: {{ set.repetitions}}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
     </div>
-    </div>
+</div>
     </div>
   </div>
-  <div class="col my-5">
-    <div class="card border-dark-subtle">
-      <div class="card-header bg bg-dark-subtle">
-        <h2>Next workout</h2>
-        <h3>Template: {{ next_workout.template.name }}</h3>
+
+  <div class="col-sm-4 mt-5 p-5">
+    <div>
+      <div class="card-header">
+        <h3 class="card-title text-dark">Next workout</h3>
+       <hr class="hr" />
+        <h4>Template: {{ next_workout.template.name }}</h4>
+          <hr class="hr" />
+        <h4>Active workout plan: {{ active_plan.name }}</h4>
       </div>
     <div class="card-body">
-        <div class="accordion py-3" id="next_workout">
+        <div class="accordion" id="next_workout">
         {% for workout_exercise, sets in next_workout_dict.items %}
           <div class="accordion-item">
-            <h2 class="accordion-header" id="heading{{ forloop.counter }}"></h2>
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#next_workout_exercise-{{ forloop.counter }}" aria-expanded="true" aria-controls="next_workout_exercise-{{ forloop.counter }}">
-                  {{ workout_exercise.exercise }}
+            <h4 class="accordion-header" id="heading{{ forloop.counter }}"></h4>
+              <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="#next_workout_exercise-{{ forloop.counter }}" aria-expanded="true" aria-controls="next_workout_exercise-{{ forloop.counter }}">
+                  <strong>{{ workout_exercise.exercise|upper }}</strong>
               </button>
            </h2>
            <div id="next_workout_exercise-{{ forloop.counter }}" class="accordion-collapse collapse", aria-labelledby="heading{{ forloop.counter }}"
-                data-bs-parent="#next_workout">
+                data-mdb-parent="#next_workout">
              <div class="accordion-body text-start">
-               <ul>
+               <ul class="list-group">
                    {% for set in sets %}
-                       <li> Set {{ set.order }}  <br> {{ set.repetitions }} reps</li>
+                       <li class="list-group-item justify-content-evenly">
+                           <div class="col">Set {{ set.order }}</div>
+                           <div class="col">{{ set.repetitions|add:"-2" }} - {{ set.repetitions }} repetitions</div>
+                       </li>
                    {% endfor %}
                </ul>
-             </div>`
+             </div>
             </div>
           </div>
 
@@ -124,8 +216,15 @@
 
 
 {% block script %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<!-- MDB -->
+
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
+
+></script>
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
 {% endblock %}
 </body>
 </html>

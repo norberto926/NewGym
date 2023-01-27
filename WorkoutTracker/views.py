@@ -14,17 +14,20 @@ from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutP
 
 
 def progression_calc(workout_base_set, workout_exercise, set_order):
+    workout_template = workout_base_set.workout_exercise.workout.template  # do this or pass a parameter
+    workout_for_workout_template = Workout.objects.get(template=workout_template, is_template=True)
+    workout_exercise_for_workout = WorkoutExercise.objects.get(workout=workout_for_workout_template,
+                                                               order=workout_base_set.workout_exercise.order)
     if int(set_order) == 1:
-        workout_template = workout_base_set.workout_exercise.workout.template # do this or pass a parameter
-        workout_for_workout_template = Workout.objects.get(template=workout_template, is_template=True)
-        workout_exercise_for_workout = WorkoutExercise.objects.get(workout=workout_for_workout_template, order=workout_base_set.workout_exercise.order)
         template_set = Set.objects.get(workout_exercise=workout_exercise_for_workout, order=1)
         if workout_base_set.repetitions == template_set.repetitions:
             return workout_base_set.load + 5, workout_base_set.repetitions
         else:
             return workout_base_set.load, template_set.repetitions
     else:
-        ...
+        previous_set_order = int(set_order) - 1
+        previous_set = Set.objects.get(workout_exercise=workout_exercise, order=int(set_order) - 1)
+
 
 
 
@@ -36,6 +39,21 @@ def create_workout_display(workout):
     for workout_exercise in workout_exercises:
         set_dict[workout_exercise] = Set.objects.filter(workout_exercise=workout_exercise).order_by('order')
     return set_dict
+
+def calculate_totals_for_workout(workout):
+    workout_exercises = WorkoutExercise.objects.filter(workout=workout)
+    total_sets = 0
+    total_load = 0
+    total_repetitions = 0
+    for workout_exercise in workout_exercises:
+        workout_exercise_sets = Set.objects.filter(workout_exercise=workout_exercise)
+        for set in workout_exercise_sets:
+            total_sets += 1
+            total_repetitions += set.repetitions
+            total_load += set.load
+    return total_sets, total_repetitions, total_load
+
+
 
 
 class CreateExercise(View):
@@ -204,6 +222,7 @@ class MainPageView(View):
         ctx = {
             'last_workout_dict': create_workout_display(last_workout),
             'last_workout': last_workout,
+            'last_workout_totals': calculate_totals_for_workout(last_workout),
             'next_workout_dict': create_workout_display(next_workout),
             'next_workout': next_workout,
             'active_plan': active_plan

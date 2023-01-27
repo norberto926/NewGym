@@ -4,11 +4,10 @@
 {% block content %}
 <section class="bg-dark p-2 text-center">
  <div class="container-fluid border-5 rounded-4 bg-dark p-5 my-5 mx-2">
-<div class="row">
+ <ul class="list-group">
 {% for workout_plan in workout_plan_list %}
-    <div class="col-lg-4">
-  <div class="card border-dark-subtle p-3 m-3">
-   <div class="card-header bg-dark-subtle">
+<div class="accordion-flush">
+<div class="accordion-header">
         {{ workout_plan.name|upper }}
         {% if workout_plan.is_active == True %}
             ACTIVE
@@ -19,25 +18,19 @@
             <button type="submit">Set as active</button>
         </form>
         <button><a href="/edit_workout_plan/{{ workout_plan.id }}">Edit </a></button>
-   </div>
-  <div class="card-body">
     {% for workout_plan_template in workout_plan.workoutplantemplates_set.all %}
-    {{ workout_plan_template.order }}. {{workout_plan_template.template}}<br>
-{% endfor %}
-
-  </div>
-   </div>
-  </div>
-
-    {% if forloop.counter|divisibleby:3 %}
+    {{ workout_plan_template.order }}. {{workout_plan_template.template}}
         </div>
-        <div class="row">
-    {% endif %}
-{% endfor %}
 </div>
+{% endfor %}
+</ul>
+
+  </div>
 
 
- </div>
+
+
+
 </section>
 {% endblock %}
 </body>
