@@ -22,65 +22,18 @@
             </h2>
         </div>
         <div class="row">
-            <div class="col">
-                <i class="fa-solid fa-calendar-days"></i>
-            </div>
-            <div class="col">
-                <div class="row">
-                    Date
-                </div>
-                <div class="row">
-                    {{ last_workout.created }}
-                </div>
-            </div>
-            <div class="col">
-                <i class="fa-solid fa-dumbbell"></i>
-            </div>
-            <div class="col">
-                <div class="row">
-                    Exercises
-                </div>
-                <div class="row">
-                        {{ last_workout_dict.items|length }}
-                </div>
-            </div>
-            <div class="col">
-                <i class="fa-solid fa-bars-sort"></i>
-            </div>
-            <div class="col">
-                <div class="row">
-                    Sets
-                </div>
-                <div class="row">
-                    {{ last_workout_totals.0 }}
-                </div>
+            <div class="col-12 col-md-6">
+                <div><i class="fa-solid fa-calendar-days fa-2xl"></i> Date: {{ last_workout.create|date: 'd M Y' }}</div>
+                <div><i class="fa-solid fa-dumbbell fa-2xl"></i> Exercises: {{ last_workout_dict.items|length }}</div>
+                <div><<i class="fa-solid fa-bars-sort fa-2xl"></i> Sets: {{ last_workout_totals.0 }}</div>
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <i class="fa-solid fa-arrows-rotate"></i>
-            </div>
-            <div class="col">
-                <div class="row">
-                    Repetitions
-                </div>
-                <div class="row">
-                    {{ last_workout_totals.1 }}
-                </div>
-            </div>
-            <div class="col">
-                <i class="fa-solid fa-weight-hanging"></i>
-            </div>
-            <div class="col">
-                <div class="row">
-                    Total load
-                </div>
-                <div class="row">
-                    {{ last_workout_totals.2 }}
-                </div>
+            <div class="col-12 col-md-6">
+                <div><i class="fa-solid fa-arrows-rotate fa-2xl"></i> Repetitions: {{ last_workout_totals.1 }}</div>
+                <div><i class="fa-solid fa-weight-hanging fa-2xl"></i> Total load: {{ last_workout_totals.2 }} kg</div>
             </div>
         </div>
-    </div>
     <div id="workout_display">
         {% for workout_exercise, sets in last_workout_dict.items %}
             <div class="row">
