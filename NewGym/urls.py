@@ -35,5 +35,5 @@ urlpatterns = [
     path('create_workout_exercise_for_workout/<new_workout_id>/<workout_base_id>/<exercise_order>', CreateWorkoutExerciseForWorkout.as_view(), name='create_workout_exercise_for_workout'),
     path('create_set_for_workout_exercise_for_workout/<workout_base_exercise_id>/<workout_exercise_id>/<set_order>', CreateSetForWorkoutExerciseForWorkout.as_view(), name='create_set_for_workout_exercise_for_workout'),
     path('edit_workout/<workout_id>', EditWorkout.as_view(), name='edit_workout'),
-    path('main', MainPageView.as_view(), name='main_page')
+    path('main/', MainPageView.as_view(), name='main_page')
 ]

@@ -33,7 +33,7 @@
 <body>
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar">
+<nav class="navbar bg-light navbar-expand-lg navbar fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">NEW GYM</a>
     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,107 +59,30 @@
 </nav>
 {% endblock %}
 {% block content %}
-<section>
+<section class="bg-primary">
 <div class="container-fluid py-5">
-
-<div class="row justify-content-between">
-  <div class="col-sm-5 mt-5 p-5">
-   <div class="container rounded-4 p-3 shadow-5-strong" id="workout_container">
-    <div class="container" id="workout_details">
-        <div class="row pb-3 pt-2">
-            <h2 class="text-center">
-                LAST WORKOUT
-            </h2>
+    <div class="row justify-content-around">
+        <div class="col-sm-5 mt-5 p-5">
+            {% with 'LAST WORKOUT' as headline%}
+            {% with last_workout as workout %}
+            {% with last_workout_dict as workout_dict %}
+            {% with last_workout_totals as workout_totals %}
+                {% include 'workout_container.html' %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
         </div>
-        <hr class="hr-blurry"/>
-        <div class="row pb-3">
-            <h3 id="template_name">
-                Template: {{ last_workout.template.name }}
-            </h3>
-        </div>
-        <div class="row justify-content-start">
-            <div class="col-12 col-md-4">
-                <div class="py-2"><i class="fa-solid fa-calendar-days fa-2xl pe-3 ps-1"></i> {{ last_workout.created|date:'d M Y' }} </div>
-                <div class="py-2"><i class="fa-solid fa-dumbbell fa-2xl pe-2"></i> Exercises: {{ last_workout_dict.items|length }}</div>
-                <div class="py-2"><i class="fa-solid fa-stopwatch-20 fa-2xl ps-1 pe-3"></i> Sets: {{ last_workout_totals.0 }}</div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="py-2"><i class="fa-solid fa-arrows-rotate fa-2xl pe-2"></i> Repetitions: {{ last_workout_totals.1 }}</div>
-                <div class="py-2"><i class="fa-solid fa-weight-hanging fa-2xl pe-2"></i> Total load: {{ last_workout_totals.2 }} kg</div>
-            </div>
-        </div>
-    <div class='container py-3' id="workout_sets">
-        {% for workout_exercise, sets in last_workout_dict.items %}
-            <hr class="hr-blurry"/>
-            <div class="row pt-3">
-                <h5>{{ workout_exercise.exercise }}</h5>
-            </div>
-
-            <div class="row pb-1 ps-3">
-                <div class="col-2">Sets</div>
-                <div class="col" >Load</div>
-                <div class="col">Repetitions</div>
-            </div>
-            {% for set in sets %}
-                <div class="row">
-                    <div class="col-2">
-                        {{ forloop.counter }}
-                    </div>
-                    <div class="col">
-                        {{ set.load }} kg
-                    </div>
-                    <div class="col">
-                        {{ set.repetitions}}
-                    </div>
-                </div>
-            {% endfor %}
-        {% endfor %}
-    </div>
-</div>
-   </div>
-  </div>
-</div>
-
-
-  <div class="col-sm-4 mt-5 p-5">
-    <div>
-      <div class="card-header">
-        <h3 class="card-title text-dark">Next workout</h3>
-       <hr class="hr" />
-        <h4>Template: {{ next_workout.template.name }}</h4>
-          <hr class="hr" />
-        <h4>Active workout plan: {{ active_plan.name }}</h4>
-      </div>
-    <div class="card-body">
-        <div class="accordion" id="next_workout">
-        {% for workout_exercise, sets in next_workout_dict.items %}
-          <div class="accordion-item">
-            <h4 class="accordion-header" id="heading{{ forloop.counter }}"></h4>
-              <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="#next_workout_exercise-{{ forloop.counter }}" aria-expanded="true" aria-controls="next_workout_exercise-{{ forloop.counter }}">
-                  <strong>{{ workout_exercise.exercise|upper }}</strong>
-              </button>
-           </h2>
-           <div id="next_workout_exercise-{{ forloop.counter }}" class="accordion-collapse collapse", aria-labelledby="heading{{ forloop.counter }}"
-                data-mdb-parent="#next_workout">
-             <div class="accordion-body text-start">
-               <ul class="list-group">
-                   {% for set in sets %}
-                       <li class="list-group-item justify-content-evenly">
-                           <div class="col">Set {{ set.order }}</div>
-                           <div class="col">{{ set.repetitions|add:"-2" }} - {{ set.repetitions }} repetitions</div>
-                       </li>
-                   {% endfor %}
-               </ul>
-             </div>
-            </div>
-          </div>
-
-        {% endfor %}
+        <div class="col-sm-5 mt-5 p-5">
+            {% with 'NEXT WORKOUT' as headline%}
+            {% with next_workout as workout %}
+            {% with next_workout_dict as workout_dict %}
+                {% include 'workout_template_container.html' %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
         </div>
     </div>
-    </div>
-  </div>
-  </div>
 </div>
 </section>
 {% endblock %}

@@ -2,35 +2,40 @@
 {% extends "main.html" %}
 <body>
 {% block content %}
-<section class="bg-dark p-2 text-center">
- <div class="container-fluid border-5 rounded-4 bg-dark p-5 my-5 mx-2">
- <ul class="list-group">
-{% for workout_plan in workout_plan_list %}
-<div class="accordion-flush">
-<div class="accordion-header">
-        {{ workout_plan.name|upper }}
-        {% if workout_plan.is_active == True %}
-            ACTIVE
-        {% endif %}
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="workout_plan_id" value="{{ workout_plan.id }}">
-            <button type="submit">Set as active</button>
-        </form>
-        <button><a href="/edit_workout_plan/{{ workout_plan.id }}">Edit </a></button>
-    {% for workout_plan_template in workout_plan.workoutplantemplates_set.all %}
-    {{ workout_plan_template.order }}. {{workout_plan_template.template}}
-        </div>
+<section class="bg-primary py-5">
+<div class="container py-5">
+    <table class="table table-hover bg-light rounded-4 shadow-5">
+        <thead>
+            <tr>
+                <th>Plan name</th>
+                <th>Created</th>
+                <th>Number of templates</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workout_plan in workout_plan_list %}
+                <tr>
+                    <td><h5><a href="edit_workout_plan/{{ workout_plan.pk }}">{{ workout_plan.name }}</a></h5></td>
+                    <td>{{ workout_plan.created|date:'d M Y' }}</td>
+                    <td>{{ workout_plan.workoutplantemplates_set.all|length }}</td>
+                    <td>
+                        {% if workout_plan.is_active == True %}
+                            <h5><span class="badge badge-success rounded-pill d-inline">Active</span></h5>
+                        {% else %}
+                            <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="workout_plan_id" value="{{ workout_plan.pk }}">
+                            <button type="submit" class="btn btn-primary btn-sm me-3">Set as active</button>
+                            </form>
+                        {% endif %}
+                    </td>
+
+                </tr>
+    {% endfor %}
+        </tbody>
+    </table>
 </div>
-{% endfor %}
-</ul>
-
-  </div>
-
-
-
-
-
 </section>
 {% endblock %}
 </body>
