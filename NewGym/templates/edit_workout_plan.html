@@ -1,21 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {{ workout_plan.name }}
-{% if workout_plan.is_active == True %}
-    <p>Active</p>
-{% endif %}
-    <ul>
-{% for workout_plan_template in workout_plan.workoutplantemplates_set.all %}
-    <li>{{ workout_plan_template.order }}. {{workout_plan_template.template}}</li>
-{% endfor %}
-    </ul>
-<button><a href="/add_workout_template_to_workout_plan">Add a template</a></button>
-<button><a href="/workout_plan_list">Done</a></button>
 
+{% extends 'main.html' %}
+<body>
+{% block content %}
+    <section class="py-5 bg-primary">
+        <div class="container py-3 my-5 bg-light rounded-4">
+            <div class="row p-4 text-primary justify-content-center">
+                <div class="col-4">
+                    <h2>{{ workout_plan.name }}</h2>
+                </div>
+            </div>
+            <div class="row pb-4 text-primary justify-content-center">
+                <div class="col-6">
+                    <button class="btn btn-primary ms-4" href="/add_workout_template_to_workout_plan"><i class="fa-solid fa-plus fa-xl pe-3"></i>Add template</button>
+                    <button class="btn btn-danger ms-4"><i class="fa-solid fa-trash fa-xl pe-3"></i>Delete plan</button>
+                {% if workout_plan.is_active == True %}
+                    <button class="btn btn-success disabled ms-4"><i class="fa-solid fa-check fa-xl pe-3"></i>Active</button>
+                {% else %}
+                    <button class="btn btn-success ms-4"><i class="fa-solid fa-check fa-xl pe-3"></i>Set as active</button>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    {% for workout, workout_dict in workout_list %}
+        <div class="col-sm-5 mt-5 p-5">
+            {% with number=forloop.counter|stringformat:"s" %}
+            {% with "TEMPLATE "|add:number as headline %}
+            {% with workout as workout %}
+            {% with workout_dict as workout_dict %}
+                {% include 'workout_template_container.html' %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}
 </body>
 </html>

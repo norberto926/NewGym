@@ -179,7 +179,14 @@ class EditWorkoutPlan(View):
     def get(self, request, workout_plan_id):
         workout_plan = WorkoutPlan.objects.get(id=workout_plan_id)
         request.session['workout_plan_id'] = workout_plan_id
-        return render(request, 'edit_workout_plan.html', {'workout_plan': workout_plan})
+        workout_plan_templates = WorkoutPlanTemplates.objects.filter(plan=workout_plan).order_by('order')
+        workout_list = []
+        workout_dict_list = []
+        for workout_plan_template in workout_plan_templates:
+            workout = Workout.objects.get(template=workout_plan_template.template, is_template=True)
+            workout_list.append((workout, create_workout_display(workout)))
+
+        return render(request, 'edit_workout_plan.html', {'workout_plan': workout_plan, 'workout_list': workout_list})
 
     def post(self, request, workout_plan_id):
         workout_plan = WorkoutPlan.objects.get(workout_plan_id)
