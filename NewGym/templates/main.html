@@ -33,9 +33,9 @@
 <body>
 
 {% block navbar %}
-<nav class="navbar bg-light navbar-expand-lg navbar fixed-top">
+<nav class="navbar-dark navbar-expand-lg navbar fixed-top" style="background-color: black">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">NEW GYM</a>
+    <a class="navbar-brand text-primary" style="font-family: 'Noto Sans Mono CJK TC'" href="main">NEW GYM</a>
     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -46,6 +46,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link"href="/workout_plan_list">My plans</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/create_workout_plan">New Workout Plan</a>
         </li>
         <li class="nav-item">
           <a class="nav-link">Workout History</a>
@@ -59,7 +62,7 @@
 </nav>
 {% endblock %}
 {% block content %}
-<section class="bg-primary">
+<section style="background-color: black">
 <div class="container-fluid py-5">
     <div class="row justify-content-around">
         <div class="col-sm-5 mt-5 p-5">

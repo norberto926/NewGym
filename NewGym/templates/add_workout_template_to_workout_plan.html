@@ -1,17 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+{% extends 'main.html' %}
+{% block content %}
 <body>
-    {% for workout_template in all_templates %}
-       {{  workout_template.name  }}
-        <form method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="workout_template_id" value="{{ workout_template.id }}">
-        <button type="submit">Add template</button>
-        </form>
+<section class="py-5" style="background-color: black">
+<div class="container py-5">
+    <table class="table table-hover rounded-4 shadow-5 text-light" style="background-color: rgba(79,79,79,0.71)">
+        <thead>
+            <tr>
+                <th>Template</th>
+                <th>Created</th>
+                <th>Number of exercises</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workout_template in all_templates %}
+                <tr>
+                    <td><h5><a href="edit_workout_template/{{ workout_template.pk }}">{{ workout_template.name }}</a></h5></td>
+                    <td>{{ workout_template.created|date:'d M Y' }}</td>
+                    <td></td>
+                </tr>
     {% endfor %}
+        </tbody>
+    </table>
+</div>
+</section>
+{% endblock %}
 </body>
 </html>
