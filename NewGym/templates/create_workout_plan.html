@@ -1,15 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create workout plan</title>
-</head>
+{% extends 'main.html' %}
 <body>
-    <button>Create new template</button>
+{% block content %}
+    <section class="py-5" style="background-color: black">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
     <form method="POST">
         {% csrf_token %}
-        {{ ctx.workout_plan_form }}
-        <button type="submit">Create plan</button>
+        <div class="form-grey">
+            {{ ctx.workout_plan_form }}
+            </div>
+        <button class="btn btn-primary my-3" type="submit">Create plan</button>
     </form>
+    </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
 </body>
 </html>

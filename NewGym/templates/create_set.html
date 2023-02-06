@@ -5,11 +5,12 @@
     <title>Create Set</title>
 </head>
 <body>
-{{ exercise }}
+{{ workout_exercise.exercise }}
 <form method="POST">
     {% csrf_token %}
-    {{ set_form }}
+    {{ set_form_workout_template }}
     <button type="submit">Add set to workout</button>
 </form>
 </body>
 </html>
+

@@ -15,16 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from WorkoutTracker.views import AddNewExerciseView, AddNewWorkoutTemplateView, EditWorkoutTemplateView, \
-    AddExerciseToWorkoutTemplate, CreateSetforWorkoutTemplate, CreateWorkoutPlan, WorkoutPlanList
+from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, EditWorkoutTemplate, \
+    AddExerciseToWorkoutTemplate, CreateSetForWorkoutExercise, CreateWorkoutPlan, WorkoutPlanList, EditWorkoutPlan, \
+    AddWorkoutTemplateToWorkoutPlan, CreateNewWorkout, CreateWorkoutExerciseForWorkout, \
+    CreateSetForWorkoutExerciseForWorkout, EditWorkout, MainPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('add_new_exercise', AddNewExerciseView.as_view()),
-    path('new_workout_template', AddNewWorkoutTemplateView.as_view()),
-    path('edit_workout_template/<workout_template_id>', EditWorkoutTemplateView.as_view(), name="edit_workout_template"),
-    path('add_exercise_to_workout_template', AddExerciseToWorkoutTemplate.as_view()),
-    path('create_set', CreateSetforWorkoutTemplate.as_view(), name="create_set"),
-    path('create_workout_plan', CreateWorkoutPlan.as_view()),
+    path('create_exercise', CreateExercise.as_view(), name='create_exercise'),
+    path('create_workout_template', CreateWorkoutTemplate.as_view(), name='create_workout_template'),
+    path('edit_workout_template/<workout_template_id>', EditWorkoutTemplate.as_view(), name="edit_workout_template"),
+    path('add_exercise_to_workout_template', AddExerciseToWorkoutTemplate.as_view(), name='add_exercise_to_workout_template'),
+    path('create_set/<int:workout_exercise_id>', CreateSetForWorkoutExercise.as_view(), name="create_set"),
+    path('create_workout_plan', CreateWorkoutPlan.as_view(), name='create_workout_plan'),
     path('workout_plan_list', WorkoutPlanList.as_view(), name='workout_plan_list'),
+    path('edit_workout_plan/<int:workout_plan_id>', EditWorkoutPlan.as_view(), name='edit_workout_plan'),
+    path('add_workout_template_to_workout_plan', AddWorkoutTemplateToWorkoutPlan.as_view(), name='add_workout_template_to_workout_plan'),
+    path('create_new_workout', CreateNewWorkout.as_view(), name='create_new_workout'),
+    path('create_workout_exercise_for_workout/<new_workout_id>/<workout_base_id>/<exercise_order>', CreateWorkoutExerciseForWorkout.as_view(), name='create_workout_exercise_for_workout'),
+    path('create_set_for_workout_exercise_for_workout/<workout_base_exercise_id>/<workout_exercise_id>/<set_order>', CreateSetForWorkoutExerciseForWorkout.as_view(), name='create_set_for_workout_exercise_for_workout'),
+    path('edit_workout/<workout_id>', EditWorkout.as_view(), name='edit_workout'),
+    path('main/', MainPageView.as_view(), name='main_page')
 ]

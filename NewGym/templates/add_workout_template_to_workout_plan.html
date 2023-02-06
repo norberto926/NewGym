@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% block content %}
+<body>
+<section class="py-5" style="background-color: black">
+<div class="container py-5">
+    <table class="table table-hover rounded-4 shadow-5 text-light" style="background-color: rgba(79,79,79,0.71)">
+        <thead>
+            <tr>
+                <th>Template</th>
+                <th>Created</th>
+                <th>Number of exercises</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workout_template in all_templates %}
+                <tr>
+                    <td><h5><a href="edit_workout_template/{{ workout_template.pk }}">{{ workout_template.name }}</a></h5></td>
+                    <td>{{ workout_template.created|date:'d M Y' }}</td>
+                    <td></td>
+                </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+</div>
+</section>
+{% endblock %}
+</body>
+</html>
