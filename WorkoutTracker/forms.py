@@ -48,3 +48,10 @@ class CreateSetForWorkoutExerciseForWorkoutForm(forms.Form):
 
 
 
+
+
+
+
+
+
+

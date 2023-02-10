@@ -1,6 +1,8 @@
+from django.forms import modelformset_factory, inlineformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic.detail import SingleObjectMixin
 
 from WorkoutTracker.filters import ExerciseFilter
 from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, WorkoutPlanForm, \
@@ -26,7 +28,17 @@ def progression_calc(workout_base_set, workout_exercise, set_order):
             return workout_base_set.load, template_set.repetitions
     else:
         previous_set_order = int(set_order) - 1
-        previous_set = Set.objects.get(workout_exercise=workout_exercise, order=int(set_order) - 1)
+        previous_set = Set.objects.get(workout_exercise=workout_exercise, order=previous_set_order)
+        template_set = Set.objects.get(workout_exercise=workout_exercise_for_workout, order=previous_set_order)
+        if previous_set.repetitions == template_set.repetitions:
+            return workout_base_set.load + 5, workout_base_set.repetitions
+        elif previous_set.repetitions == template_set.repetitions - 1:
+            return workout_base_set.load + 5, workout_base_set.repetitions
+        elif previous_set.repetitions == template_set.repetitions - 2:
+            return workout_base_set.load, workout_base_set.repetitions
+        elif previous_set.repetitions < template_set.repetitions - 2:
+            return workout_base_set.load - 5, workout_base_set.repetitions
+
 
 
 
@@ -287,8 +299,8 @@ class CreateSetForWorkoutExerciseForWorkout(View):
         workout_base_exercise = WorkoutExercise.objects.get(id=workout_base_exercise_id)
         workout_base_set = Set.objects.get(workout_exercise=workout_base_exercise, order=set_order)
         workout_exercise = WorkoutExercise.objects.get(id=workout_exercise_id)
-        form = CreateSetForWorkoutExerciseForWorkoutForm(initial={'load': workout_base_set.load,
-                                                                  'repetitions': workout_base_set.repetitions})
+        form = CreateSetForWorkoutExerciseForWorkoutForm(initial={'load': progression_calc(workout_base_set, workout_exercise, set_order)[0],
+                                                                  'repetitions': progression_calc(workout_base_set, workout_exercise, set_order)[1]})
 
         return render(request, 'create_set_for_workout_exercise_for_workout.html', {'form': form, 'workout_exercise': workout_exercise})
 
@@ -326,6 +338,49 @@ class EditWorkout(View):
                'set_dict': set_dict
                }
         return render(request, 'edit_workout.html', ctx)
+
+
+def test_edit_workout_template(request, workout_template_pk):
+    workout_template = WorkoutTemplate.objects.get(pk=workout_template_pk)
+    template_form = WorkoutTemplateForm(instance=workout_template)
+    workout = Workout.objects.get(template=workout_template, is_template=True)
+    workout_exercises = WorkoutExercise.objects.filter(workout=workout)
+    SetFormset = inlineformset_factory(WorkoutExercise, Set, form=SetFormWorkoutTemplate, extra=0)
+    workout_dict = {}
+    if request.method == 'GET':
+        for exercise in workout_exercises:
+            formset = SetFormset(instance=exercise, prefix=exercise.exercise)
+            workout_dict[exercise] = formset
+            ctx = {'template_form': template_form,
+                   'workout_dict': workout_dict
+                   }
+        return render(request, 'test_edit_workout_template.html', ctx)
+
+    if request.method == 'POST':
+        template_form = WorkoutTemplateForm(request.POST, instance=workout_template)
+        print(request.POST)
+        if template_form.is_valid():
+            template_form.save()
+        for exercise in workout_exercises:
+            formset = SetFormset(request.POST, instance=exercise, prefix=exercise.exercise)
+            for index, form in enumerate(formset):
+                if form.is_valid():
+                    new_set = form.save(commit=False)
+                    if not new_set.order:
+                        new_set.order = index + 1
+                    if new_set.repetitions:
+                        form.save()
+            for form in formset.deleted_forms:
+                if form.instance.pk:
+                    form.instance.delete()
+        return redirect('test_edit_workout_template', workout_template_pk=workout_template_pk)
+
+
+
+
+
+
+
 
 
 
