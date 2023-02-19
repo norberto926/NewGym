@@ -1,8 +1,13 @@
 import datetime
 
+from django.contrib.auth.models import AbstractUser, User
 from django.db import models
 
 # Create your models here.
+
+
+# class User(AbstractUser):
+#     pass
 
 
 class Equipment(models.Model):
@@ -18,10 +23,11 @@ class Muscle(models.Model):
     def __str__(self):
         return self.name
 
-
+default_user = User.objects.get(username='norberto926')
 class Exercise(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.TextField(null=True, blank=True)
     equipment_needed = models.ManyToManyField(Equipment)
     main_muscle_group = models.ForeignKey(Muscle, on_delete=models.CASCADE)
 
@@ -31,53 +37,47 @@ class Exercise(models.Model):
 
 class WorkoutTemplate(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    is_archived = models.BooleanField(default=False)
+    sample = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
 
 class Workout(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     comment = models.TextField(null=True)
     template = models.ForeignKey(WorkoutTemplate, on_delete=models.CASCADE)
     is_template = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
 
 
 class WorkoutExercise(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
     order = models.IntegerField()
 
 
 class Set(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     workout_exercise = models.ForeignKey(WorkoutExercise, on_delete=models.CASCADE)
     load = models.IntegerField(null=True)
     repetitions = models.IntegerField()
     order = models.IntegerField()
-    duration = models.IntegerField(null=True, blank=True)
-    is_loaded = models.BooleanField(default=True)
+    done = models.BooleanField(default=False)
 
 
-class WorkoutPlan(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=64)
-    workout_templates = models.ManyToManyField(WorkoutTemplate, through='WorkoutPlanTemplates')
-    is_active = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
 
 
-class WorkoutPlanTemplates(models.Model):
-    template = models.ForeignKey(WorkoutTemplate, on_delete=models.CASCADE)
-    plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE)
-    order = models.IntegerField()
+
     
 
 

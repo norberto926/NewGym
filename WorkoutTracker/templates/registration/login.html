@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+{% block content %}
+<section class="d-flex justify-content-center">
+    <div class="w-50 p-5 mt-5 d-flex justify-content-center border border-secondary border-5 rounded-4 text-center text-light" style="background-color:#0096c7">
+        <form method="POST">
+            {% csrf_token %}
+                {{ form|crispy }}
+            <p class="pt-2 mt-3">
+                Don't have an account? Create one <a class="text-secondary" href="/sign_up"><strong>here</strong></a>.
+            </p>
+            <button class="btn btn-lg btn-secondary w-100 mt-3"type="submit"><strong>LOGIN</strong></button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,60 @@
+<div class="container rounded-4 p-3 shadow-5-strong text-light border border-secondary border-5" id="workout_container" style="background-color:#0096c7">
+    <div class="container" id="workout_details">
+        <div class="row pb-3 pt-2">
+            <h2 class="text-center text-secondary" style="font-family: 'Noto Sans Mono CJK TC'">
+                <strong>{{ headline }}</strong>
+            </h2>
+            {% if headline == 'WORKOUT DETAILS' %}
+            <div class="row d-flex justify-content-around pt-4 pb-2">
+                <a href="/edit_workout/{{workout.pk}}" class="btn btn-secondary me-2 w-25">Edit workout</a>
+                <a href="/delete_workout/{{ workout.pk }}" class="btn btn-secondary w-25">Delete workout</a>
+            </div>
+            {% endif %}
+        </div>
+        <hr class="hr-blurry"/>
+        <div class="row pb-3 text-center">
+            <h3 id="template_name" class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'">
+                <strong>{{ workout.template.name|upper }}</strong>
+            </h3>
+        </div>
+        <hr class="hr-blurry"/>
+        <div class="row justify-content-around">
+            <div class="col-12 col-md-4">
+                <div class="py-2 text-secondary"><i class="fa-solid fa-calendar-days fa-2xl pe-3 ps-1 text-secondary"></i> <strong>{{ workout.created|date:'d M Y' }} </strong></div>
+                <div class="py-2 text-secondary"><i class="fa-solid fa-dumbbell fa-2xl pe-2 text-secondary"></i><strong>   Exercises: {{ workout_dict.items|length }}</strong></div>
+                <div class="py-2 text-secondary"><i class="fa-solid fa-stopwatch-20 fa-2xl ps-1 pe-3 text-secondary"></i> <strong>Sets: {{ workout_totals.0 }}</strong></div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="py-2 text-secondary"><i class="fa-solid fa-arrows-rotate fa-2xl pe-2 text-secondary"></i> <strong>Repetitions: {{ workout_totals.1 }}</strong></div>
+                <div class="py-2 text-secondary"><i class="fa-solid fa-weight-hanging fa-2xl pe-2 text-secondary"></i> <strong>Total load: {{ workout_totals.2 }} kg</strong></div>
+            </div>
+        </div>
+    <div class='container py-3' id="workout_sets">
+        {% for workout_exercise, sets in workout_dict.items %}
+            <hr class="hr-blurry"/>
+            <div class="row pt-3">
+                <h5 class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'"><strong>{{ workout_exercise.exercise|upper }}</strong></h5>
+            </div>
+
+            <div class="row pb-1 justify-content-between">
+                <div class="col-2"><strong>SETS</strong></div>
+                <div class="col-3"><strong>REPETITIONS</strong></div>
+                <div class="col-3"><strong>LOAD</strong></div>
+            </div>
+            {% for set in sets %}
+                <div class="row justify-content-between">
+                    <div class="col-2">
+                        {{ forloop.counter }}
+                    </div>
+                    <div class="col-3">
+                        {{ set.repetitions }}
+                    </div>
+                    <div class="col-3">
+                        {{ set.load }} kg
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+</div>

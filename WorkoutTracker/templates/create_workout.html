@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+{% block content %}
+<section class="py-5">
+<div class="container py-5">
+    <table class="table table-hover rounded-4 shadow-5 text-light text-center border border-secondary border-5 rounded-4" style="background-color: #0096c7">
+        <thead class="text-secondary text-nowrap" style="font-family: 'Noto Sans Mono CJK TC'">
+            <tr>
+                <th class="text-start"><strong>TEMPLATE</strong></th>
+                <th><strong>CREATED</strong></th>
+                <th><strong>EXERCISES</strong></th>
+                <th><strong>NUMBER OF SETS</strong></th>
+                <th><strong>LAST WORKOUT</strong></th>
+                <th><strong>WORKOUT COUNT</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workout_template, data in workout_template_dict.items %}
+                <tr>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="workout_template_pk" value="{{ workout_template.pk }}">
+                            <button class="btn btn-link btn-lg text-secondary p-1 fw-bold fw" style="font-family: 'Noto Sans Mono CJK TC'" type="submit">{{ workout_template.name }}</button>
+                        </form>
+                    </td>
+                    <td>{{ workout_template.created|date:'d M Y' }}</td>
+                    <td>{%  for exercise in data.all_exercises %}
+                            {{ exercise.exercise }} |
+                        {% endfor %}
+                    </td>
+                    <td> {{ data.all_sets_count }}</td>
+                    <td>{{ data.last_workout_with_template|date:'d M Y' }}</td>
+                    <td>{{ data.total_workouts_done_with_template }}</td>
+                </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</section>
+{% endblock %}
+</body>
+</html>

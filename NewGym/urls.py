@@ -14,28 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, EditWorkoutTemplate, \
-    AddExerciseToWorkoutTemplate, CreateSetForWorkoutExercise, CreateWorkoutPlan, WorkoutPlanList, EditWorkoutPlan, \
-    AddWorkoutTemplateToWorkoutPlan, CreateNewWorkout, CreateWorkoutExerciseForWorkout, \
-    CreateSetForWorkoutExerciseForWorkout, EditWorkout, MainPageView, \
-    test_edit_workout_template
+from django.urls import path, include
+from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, MainPageView, edit_workout_template, \
+    WorkoutTemplateList, ExerciseList, AddExercise, DeleteExercise, CreateWorkout, edit_workout, ArchiveTemplate, \
+    WorkoutDetails, WorkoutList, CreateUser, DeleteWorkout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('django.contrib.auth.urls')),
     path('create_exercise', CreateExercise.as_view(), name='create_exercise'),
     path('create_workout_template', CreateWorkoutTemplate.as_view(), name='create_workout_template'),
-    path('edit_workout_template/<workout_template_id>', EditWorkoutTemplate.as_view(), name="edit_workout_template"),
-    path('add_exercise_to_workout_template', AddExerciseToWorkoutTemplate.as_view(), name='add_exercise_to_workout_template'),
-    path('create_set/<int:workout_exercise_id>', CreateSetForWorkoutExercise.as_view(), name="create_set"),
-    path('create_workout_plan', CreateWorkoutPlan.as_view(), name='create_workout_plan'),
-    path('workout_plan_list', WorkoutPlanList.as_view(), name='workout_plan_list'),
-    path('edit_workout_plan/<int:workout_plan_id>', EditWorkoutPlan.as_view(), name='edit_workout_plan'),
-    path('add_workout_template_to_workout_plan', AddWorkoutTemplateToWorkoutPlan.as_view(), name='add_workout_template_to_workout_plan'),
-    path('create_new_workout', CreateNewWorkout.as_view(), name='create_new_workout'),
-    path('create_workout_exercise_for_workout/<new_workout_id>/<workout_base_id>/<exercise_order>', CreateWorkoutExerciseForWorkout.as_view(), name='create_workout_exercise_for_workout'),
-    path('create_set_for_workout_exercise_for_workout/<workout_base_exercise_id>/<workout_exercise_id>/<set_order>', CreateSetForWorkoutExerciseForWorkout.as_view(), name='create_set_for_workout_exercise_for_workout'),
-    path('edit_workout/<workout_id>', EditWorkout.as_view(), name='edit_workout'),
+    path('edit_workout/<workout_pk>', edit_workout, name='edit_workout'),
     path('main/', MainPageView.as_view(), name='main_page'),
-    path('test_edit_workout_template/<int:workout_template_pk>', test_edit_workout_template, name='test_edit_workout_template')
+    path('edit_workout_template/<int:workout_template_pk>', edit_workout_template, name='edit_workout_template'),
+    path('workout_template_list', WorkoutTemplateList.as_view(), name='workout_template_list'),
+    path('exercise_list', ExerciseList.as_view(), name='exercise_list'),
+    path('add_exercise/<int:workout_template_pk>', AddExercise.as_view(), name='add_exercise'),
+    path('delete_exercise/<int:workout_template_pk>/<int:workout_exercise_pk>', DeleteExercise.as_view(), name='delete_exercise'),
+    path('create_workout', CreateWorkout.as_view(), name='create_workout'),
+    path('archive_template/<int:workout_template_pk>', ArchiveTemplate.as_view(), name='archive_template'),
+    path('workout_details/<int:workout_pk>', WorkoutDetails.as_view(), name='workout_details'),
+    path('workout_list', WorkoutList.as_view(), name='workout_list'),
+    path('sign_up', CreateUser.as_view(), name='sign_up'),
+    path('delete_workout/<int:workout_pk>', DeleteWorkout.as_view(), name='delete_workout')
 ]

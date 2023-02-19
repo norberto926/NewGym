@@ -1,0 +1,158 @@
+{% load static %}
+{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        {% block title %}
+        <title>New Gym</title>
+        {% endblock  %}
+        {% block style %}
+            <!-- Font Awesome -->
+            <link
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+              rel="stylesheet"
+            />
+            <!-- Google Fonts -->
+            <link
+              href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+              rel="stylesheet"
+            />
+            <!-- MDB -->
+            <link
+              href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css"
+              rel="stylesheet"
+            />
+            <link
+
+            />
+                        <link rel="stylesheet" href="{% static 'WorkoutTracker/color.css' %}">
+
+            />
+        {% endblock %}
+    {% endblock %}
+</head>
+
+<body style="background-color:#a9d6e5">
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar fixed-top text-secondary" style="background-color: #0096c7">
+  <div class="container-fluid">
+      <a class="navbar-brand text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/main"><strong>NEW GYM</strong></a>
+      <div class="vr bg-secondary"></div>
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout"><strong>NEW WORKOUT</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_list"><strong>WORKOUT HISTORY</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_template_list"><strong>WORKOUT TEMPLATES</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout_template"><strong>NEW WORKOUT TEMPLATE</strong></a>
+        </li>
+        <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/exercise_list"><strong>EXERCISES</strong></a>
+        </li>
+        <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_exercise"><strong>NEW EXERCISE</strong></a>
+        </li>
+      </ul>
+        {% if user.is_authenticated %}
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href=""><strong>{{ user.username }}</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/logout"><strong>LOGOUT</strong></a>
+        </li>
+      </ul>
+         {% else %}
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/login"><strong>LOGIN</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/sign_up"><strong>REGISTER</strong></a>
+        </li>
+      </ul>
+         {% endif %}
+
+    </div>
+  </div>
+</nav>
+{% endblock %}
+{% block content %}
+<section>
+{% if user.is_authenticated %}
+<div class="container-fluid py-5">
+{#    <div class="row justify-content-center">#}
+{#        <div class="col-sm-3 mt-5 p-1 me-5 text-center btn border border-secondary border-5" style="background-color:#0096c7">#}
+{#            <i class="fa-solid fa-dumbbell  text-secondary" style="font-size: 140px"></i>#}
+{#            <h2 class="text-center text-secondary" style="font-family: 'Noto Sans Mono CJK TC'">#}
+{#                <strong>WORKOUT</strong>#}
+{#            </h2>#}
+{#        </div>#}
+{#    </div>#}
+{% if unfinished_workouts %}
+    <div class="row justify-content-center">
+        <div class="col-sm-6 mt-5 p-5 me-5">
+        <div class="container rounded-4 p-3 shadow-5-strong text-light border border-secondary border-5 text-center" id="workout_container" style="background-color:#0096c7">
+        <h3 class="text-secondary pb-3" style="font-family: 'Noto Sans Mono CJK TC'"><strong>YOU HAVE UNFINISHED WORKOUTS/TEMPLATES</strong></h3>
+            {% for workout in unfinished_workouts %}
+                {% if workout.is_template %}
+                <h5 class="pb-2"><a class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/edit_workout_template/{{ workout.template.pk }}"><strong>{{ workout.template.name}}</strong></a></h5>
+                {% endif %}
+                {% if workout.is_template == False %}
+                 <h5 class="pb-2"><a class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/edit_workout/{{ workout.pk }}"><strong>{{ workout.template.name }} | {{ workout.created|date:'d M Y'}}</strong></a></h5>
+                {% endif %}
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+{% endif %}
+    <div class="row justify-content-center">
+        <div class="col-sm-6 mt-5 p-5 me-5">
+            {% with 'LAST WORKOUT' as headline%}
+            {% with last_workout as workout %}
+            {% with last_workout_dict as workout_dict %}
+            {% with last_workout_totals as workout_totals %}
+                {% include 'workout_container.html' %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endif %}
+</section>
+{% endblock %}
+
+
+{% block script %}
+<!-- MDB -->
+
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
+
+></script>
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+{% endblock %}
+</body>
+</html>

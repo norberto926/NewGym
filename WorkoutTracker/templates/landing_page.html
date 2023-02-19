@@ -1,0 +1,65 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar fixed-top text-secondary" style="background-color: #0096c7">
+  <div class="container-fluid">
+      <a class="navbar-brand text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/main"><strong>NEW GYM</strong></a>
+      <div class="vr bg-secondary"></div>
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout"><strong>NEW WORKOUT</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_list"><strong>WORKOUT HISTORY</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_template_list"><strong>WORKOUT TEMPLATES</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout_template"><strong>NEW WORKOUT TEMPLATE</strong></a>
+        </li>
+        <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/exercise_list"><strong>EXERCISES</strong></a>
+        </li>
+        <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_exercise"><strong>NEW EXERCISE</strong></a>
+        </li>
+      </ul>
+        {% if user.is_authenticated %}
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href=""><strong>{{ user.username }}</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/logout"><strong>LOGOUT</strong></a>
+        </li>
+      </ul>
+         {% else %}
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/login"><strong>LOGIN</strong></a>
+        </li>
+          <div class="vr bg-secondary"></div>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/sign_up"><strong>REGISTER</strong></a>
+        </li>
+      </ul>
+         {% endif %}
+
+    </div>
+  </div>
+</nav>
+{% endblock %}

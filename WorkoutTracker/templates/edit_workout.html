@@ -1,0 +1,112 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <section class="text-center text-light m-5 d-flex justify-content-center">
+    <div class="w-50 p-4 m-5 justify-content-center border border-secondary border-0 rounded-4" style="background-color:#0096c7">
+    <form method="POST">
+        {% csrf_token %}
+        {% for exercise, formset in workout_dict.items %}
+            <div class="p-3 pb-1 m-3 border border-secondary border-5 rounded-4 shadow" style="background-color:#0096c7">
+            <div class="pb-2">
+                <div class="row justify-content-between pb-3">
+                    <div class="col text-start">
+                        <h3 class="text-secondary"style="font-family: 'Noto Sans Mono CJK TC'"><strong>{{ exercise.exercise|upper }}</strong></h3>
+                    </div>
+                </div>
+                <hr class="hr-blurry"/>
+                <div class="row">
+                    <div class="col-3 text-start">
+                        <strong>SETS</strong>
+                    </div>
+                    <div class="col-3 text-start"><STRONG>REPETITIONS</STRONG></div>
+                    <div class="col-3 text-start"><STRONG>LOAD</STRONG></div>
+                    <div class="col-2 text-center"><strong>DONE</strong></div>
+                </div>
+            </div>
+            <div id="set-form-list-{{ exercise.exercise|lower }}">
+            {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="set-form-{{ exercise.exercise|lower }} row mb-1">
+                        <div class="col-3 text-start">
+                             <span class="set-order-{{ exercise.exercise|lower }} d-inline">{{ forloop.counter }}</span>
+                        </div>
+                        <div class="col-3">
+                            {{ form.repetitions }}
+                            {{ form.workout_exercise }}
+                            {{ form.id }}
+                        </div>
+                        <div class="col-3 d-inline-flex">
+                            {{ form.load }} <strong>kg</strong>
+                        </div>
+                        <div class="col-2 text-center">
+                            {{ form.done }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <style>
+            .hidden{
+                display: none;
+            }
+            </style>
+            <div id="empty-form-{{ exercise.exercise|lower }}" class="hidden row">
+                <div class="col-4 text-start">
+                    <span class="set-order-{{ exercise.exercise|lower }} d-inline"></span>
+                </div>
+                <div class="col-4">
+                    {% render_field formset.empty_form.repetitions class='form-control w-50 text-light bg-secondary', style='text-align:center;' %}
+                </div>
+                <div class="col-4 text-end">
+                    <button class="btn btn-secondary" type="button"><i class="fa-solid fa-trash fa-xl pe-2"></i>{{ formset.empty_form.DELETE }}</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <a href="/workout_template_list" class="btn btn-lg btn-secondary px-5 m-4 w-25"><i class="fa-solid fa-xmark fa-xl me-3"></i><strong>Cancel</strong></a>
+        <button class="btn btn-lg btn-secondary px-5 m-4 w-25"type="submit"><i class="fa-solid fa-floppy-disk fa-xl me-3"></i><strong>Save</strong></button>
+
+    </form>
+    </div>
+    </section>
+{% endblock %}
+{% block script %}
+<script>
+    const addSetButtons = document.getElementsByClassName('add_set_button')
+    for(let i=0; i < addSetButtons.length; i++){
+        addSetButtons[i].addEventListener('click', addNewForm)
+    }
+    function addNewForm(event){
+        if (event){
+            event.preventDefault()
+        }
+        const exercise = this.getAttribute('id')
+        const formCopyTarget = document.getElementById('set-form-list-' + exercise.toLowerCase())
+        const emptyFormEl = document.getElementById('empty-form-' + exercise.toLowerCase()).cloneNode(true)
+        const totalNewForms = document.getElementById('id_' + exercise + '-TOTAL_FORMS')
+        const currentSetForms = document.getElementsByClassName('set-form-' + exercise.toLowerCase())
+        const currentFormCount = currentSetForms.length
+        emptyFormEl.setAttribute('class', 'set-form-' + exercise.toLowerCase() + " row")
+        emptyFormEl.setAttribute('id', exercise + "-" + currentFormCount)
+        const regex = new RegExp('__prefix__', 'g')
+        emptyFormEl.innerHTML = emptyFormEl.innerHTML.replace(regex, currentFormCount)
+        totalNewForms.setAttribute('value', currentFormCount + 1)
+        formCopyTarget.append(emptyFormEl)
+        const setOrderSpans = document.getElementsByClassName('set-order-' + exercise.toLowerCase())
+        const lastSetOrderSpan = setOrderSpans[setOrderSpans.length - 2]
+        lastSetOrderSpan.innerText = currentFormCount + 1
+    }
+
+
+</script>
+    <script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
+
+></script>
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+{% endblock %}
+</body>
+</html>

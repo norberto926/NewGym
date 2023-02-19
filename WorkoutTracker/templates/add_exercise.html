@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block content %}
+{% load widget_tweaks %}
+<section class="py-5 d-flex justify-content-center">
+<div class="container p-3 m-5 justify-content-center border border-secondary border-5 rounded-4" style="background-color:#0096c7">
+<form method="GET">
+    <div class="row">
+        <div class="col-4">
+            <h5 class="text-secondary text-center" style="font-family: 'Noto Sans Mono CJK TC'"><strong>EQUIPMENT</strong></h5>
+            <button class="btn btn-secondary w-100" type="button" style="font-family: 'Noto Sans Mono CJK TC'" data-mdb-toggle="collapse" data-mdb-target="#equipment" aria-expanded="false" aria-controls="equipment"><i class="fa-solid fa-chevron-down fa-xl"></i></button>
+            <div class="collapse" id="equipment">
+                <div class="card card-body bg-secondary text-light">
+                {% render_field exercise_filter.form.equipment_needed class='form-check form-check-inline text-light'%}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <h5 class="text-secondary text-center" style="font-family: 'Noto Sans Mono CJK TC'"><strong>MAIN MUSCLE GROUP</strong></h5>
+            {% render_field exercise_filter.form.main_muscle_group class='form-select text-light bg-secondary'%}
+        </div>
+        <div class="col">
+            <h5 class="text-secondary text-center" style="font-family: 'Noto Sans Mono CJK TC'"><strong>NAME</strong></h5>
+            {% render_field exercise_filter.form.name__contains class='form-control text-light bg-secondary'%}
+        </div>
+    </div>
+    <div class="col text-center py-3">
+        <button class="btn btn-lg btn-secondary px-5 m-4 w-25"type="submit"><i class="fa-solid fa-filter fa-xl me-3"></i><strong>Filter</strong></button>
+    </div>
+</form>
+</div>
+</section>
+<section class="d-flex justify-content-center">
+<div class="container py-5">
+    <table class="table table-hover rounded-4 shadow-5 text-light text-center border border-secondary border-5 rounded-4" style="background-color: #0096c7">
+        <thead class="text-secondary text-nowrap" style="font-family: 'Noto Sans Mono CJK TC'">
+            <tr>
+                <th class="text-start"><strong>NAME</strong></th>
+                <th><strong>DESCRIPTION</strong></th>
+                <th><strong>MAIN MUSCLE GROUP</strong></th>
+                <th><strong>EQUIPMENT NEEDED</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exercise in exercise_filter.qs %}
+                <tr>
+                    <td class="text-start">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="exercise_pk" value="{{ exercise.pk }}">
+                            <button class="btn btn-link btn-lg text-secondary p-1 fw-bold fw" style="font-family: 'Noto Sans Mono CJK TC'" type="submit">{{ exercise.name }}</button>
+                        </form>
+                    </td>
+                    <td>{{ exercise.description }}</td>
+                    <td> {{ exercise.main_muscle_group }}</td>
+                    <td>
+                        {%  for equipment in exercise.equipment_needed.all %}
+                            {{ equipment }} |
+                        {% endfor %}
+                    </td>
+                </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</section>
+{% endblock %}
+</body>
+</html>
