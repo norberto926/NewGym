@@ -1,7 +1,7 @@
 <div class="container rounded-4 p-3 shadow-5-strong text-light border border-secondary border-5" id="workout_container" style="background-color:#0096c7">
     <div class="container" id="workout_details">
         <div class="row pb-3 pt-2">
-            <h2 class="text-center text-secondary" style="font-family: 'Noto Sans Mono CJK TC'">
+            <h2 class="text-center text-secondary">
                 <strong>{{ headline }}</strong>
             </h2>
             {% if headline == 'WORKOUT DETAILS' %}
@@ -13,7 +13,7 @@
         </div>
         <hr class="hr-blurry"/>
         <div class="row pb-3 text-center">
-            <h3 id="template_name" class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'">
+            <h3 id="template_name" class="text-secondary">
                 <strong>{{ workout.template.name|upper }}</strong>
             </h3>
         </div>
@@ -33,7 +33,7 @@
         {% for workout_exercise, sets in workout_dict.items %}
             <hr class="hr-blurry"/>
             <div class="row pt-3">
-                <h5 class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'"><strong>{{ workout_exercise.exercise|upper }}</strong></h5>
+                <h5 class="text-secondary"><strong>{{ workout_exercise.exercise|upper }}</strong></h5>
             </div>
 
             <div class="row pb-1 justify-content-between">

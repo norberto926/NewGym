@@ -1,31 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import modelformset_factory, inlineformset_factory
+from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.views import View
-from WorkoutTracker.filters import ExerciseFilter
-from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, \
-    SetFormWorkout, RegisterForm
-from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate, \
-    Set, WorkoutExercise
-from django.contrib.auth import login, logout, authenticate
+from django.db import IntegrityError
+from django.contrib.auth import login
 
+from WorkoutTracker.database_population import populate_exercises_on_registration, populate_templates_on_registration
+from WorkoutTracker.filters import ExerciseFilter
+from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, SetFormWorkout, RegisterForm
+from WorkoutTracker.models import Exercise, Workout, WorkoutTemplate, Set, WorkoutExercise
 
 
 # Create your views here.
-
-def populate_exercises_on_registration(request):
-    tricep_dips = Exercise.objects.create(name='Tricep dips', owner=request.user, main_muscle_group=Muscle.objects.get(name='Tricep'))
-    tricep_dips.equipment_needed.add(Equipment.objects.get(name='Tricep Dip bar'))
-    push_ups = Exercise.objects.create(name='Push-up', owner=request.user, main_muscle_group=Muscle.objects.get(name='Chest'))
-    machine_chest_flies = Exercise.objects.create(name='Machine chest flies', owner=request.user, main_muscle_group=Muscle.objects.get(name='Chest'))
-    machine_chest_flies.equipment_needed.add(Equipment.objects.get(name='Fly machine'))
-    dumbell_chest_flies = Exercise.objects.create(name='Dumbell chest flies', owner=request.user, main_muscle_group=Muscle.objects.get(name='Chest'))
-    dumbell_chest_flies.equipment_needed.add(Equipment.objects.get(name='Bench'))
-    dumbell_chest_flies.equipment_needed.add(Equipment.objects.get(name='Dumbells'))
-    cable_crossovers = Exercise.objects.create(name='Cable crossovers', owner=request.user, main_muscle_group=Muscle.objects.get(name='Chest'))
-    cable_crossovers.equipment_needed.add(Equipment.objects.get(name='Exercise Atlas'))
-
 
 
 def create_workout_display(workout):
@@ -34,6 +21,7 @@ def create_workout_display(workout):
     for workout_exercise in workout_exercises:
         set_dict[workout_exercise] = Set.objects.filter(workout_exercise=workout_exercise).order_by('order')
     return set_dict
+
 
 def calculate_totals_for_workout(workout):
     workout_exercises = WorkoutExercise.objects.filter(workout=workout)
@@ -50,16 +38,32 @@ def calculate_totals_for_workout(workout):
     return total_sets, total_repetitions, total_load
 
 
-
 class CreateExercise(View):
     def get(self, request):
         form = ExerciseForm()
         return render(request, "create_exercise.html", {"form": form})
 
     def post(self, request):
-        exercise_form = ExerciseForm(request.POST)
-        if exercise_form.is_valid():
-            exercise_form.save()
+        form = ExerciseForm(request.POST)
+        form.instance.owner = request.user
+        form.instance.sample = False
+        if form.is_valid():
+            try:
+                new_exercise = form.save()
+            except IntegrityError:
+                return render(request, 'create_exercise.html', {'form': form, 'error_message': 'Exercise with this name already exists'})
+            if form.cleaned_data.get('equipment_needed'):
+                for el in form.cleaned_data['equipment_needed']:
+                    new_exercise.equipment_needed.add(el)
+            return redirect('exercise_list')
+        return render(request, 'create_exercise.html', {'form': form})
+
+
+class DeleteExercise(View):
+    def get(self, request, exercise_pk):
+        exercise = Exercise.objects.get(id=exercise_pk)
+        if exercise:
+            exercise.delete()
             return redirect('exercise_list')
 
 
@@ -84,7 +88,6 @@ class MainPageView(View):
 
 
 class CreateUser(View):
-
     def get(self, request):
         form = RegisterForm()
         return render(request, 'registration/sign_up.html', {'form': form})
@@ -95,6 +98,7 @@ class CreateUser(View):
             user = form.save()
             login(request, user)
             populate_exercises_on_registration(request)
+            populate_templates_on_registration(request)
             return redirect('/main')
         return render(request, 'registration/sign_up.html', {'form': form})
 
@@ -110,7 +114,10 @@ class CreateWorkoutTemplate(LoginRequiredMixin, View):
         if workout_template_form.is_valid():
             new_workout_template = workout_template_form.save(commit=False)
             new_workout_template.owner = request.user
-            new_workout_template.save()
+            try:
+                new_workout_template.save()
+            except IntegrityError:
+                return render(request, 'create_workout_template.html', {'workout_template_form': workout_template_form, 'error_message': 'Template with this name already exists'})
             new_workout = Workout.objects.create(is_template=True, template=new_workout_template, owner=request.user)
             return redirect('edit_workout_template', workout_template_pk=new_workout_template.pk)
         return render(request, 'create_workout_template.html', {'workout_template_form': workout_template_form})
@@ -193,7 +200,7 @@ class ExerciseList(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, *args, **kwargs):
 
-        exercise_list = Exercise.objects.filter(owner=request.user)
+        exercise_list = Exercise.objects.filter(owner=request.user).order_by('name')
         exercise_filter = ExerciseFilter(request.GET, queryset=exercise_list)
         ctx = {
             "exercise_filter": exercise_filter
@@ -205,7 +212,7 @@ class ExerciseList(LoginRequiredMixin, View):
 class AddExercise(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, workout_template_pk):
-        exercise_list = Exercise.objects.filter(owner=request.user)
+        exercise_list = Exercise.objects.filter(owner=request.user).order_by('name')
         exercise_filter = ExerciseFilter(request.GET, queryset=exercise_list)
         workout_template_pk = request.GET.get('workout_template_id')
         ctx = {
@@ -226,7 +233,8 @@ class AddExercise(LoginRequiredMixin, View):
         new_workout_exercise = WorkoutExercise.objects.create(exercise=exercise, workout=workout, order=len(exercises_in_workout) + 1, owner=request.user)
         return redirect('edit_workout_template', workout_template_pk=workout_template_pk)
 
-class DeleteExercise(LoginRequiredMixin, View):
+
+class DeleteWorkoutExercise(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, workout_template_pk, workout_exercise_pk):
         workout_exercise = WorkoutExercise.objects.get(id=workout_exercise_pk, owner=request.user)
@@ -365,6 +373,7 @@ class WorkoutList(LoginRequiredMixin, View):
 
         return render(request, 'workout_list.html', ctx)
 
+
 class DeleteWorkout(LoginRequiredMixin, View):
     login_url = '/login/'
 
@@ -372,6 +381,11 @@ class DeleteWorkout(LoginRequiredMixin, View):
         workout = Workout.objects.get(id=workout_pk)
         workout.delete()
         return redirect('workout_list')
+
+
+class LandingPage(View):
+    def get(self, request):
+        return render(request, 'landing_page.html')
 
 
 

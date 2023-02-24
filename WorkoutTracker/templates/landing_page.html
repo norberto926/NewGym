@@ -6,60 +6,127 @@
 {% block navbar %}
 <nav class="navbar navbar-expand-lg navbar fixed-top text-secondary" style="background-color: #0096c7">
   <div class="container-fluid">
-      <a class="navbar-brand text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/main"><strong>NEW GYM</strong></a>
-      <div class="vr bg-secondary"></div>
+      <a class="navbar-brand text-secondary logo" href=""><strong>NEW GYM</strong></a>
     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout"><strong>NEW WORKOUT</strong></a>
-        </li>
-          <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_list"><strong>WORKOUT HISTORY</strong></a>
-        </li>
-          <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_template_list"><strong>WORKOUT TEMPLATES</strong></a>
-        </li>
-          <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout_template"><strong>NEW WORKOUT TEMPLATE</strong></a>
-        </li>
-        <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/exercise_list"><strong>EXERCISES</strong></a>
-        </li>
-        <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_exercise"><strong>NEW EXERCISE</strong></a>
-        </li>
-      </ul>
-        {% if user.is_authenticated %}
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href=""><strong>{{ user.username }}</strong></a>
+            <a class="nav-link text-secondary" href=""><strong>ABOUT</strong></a>
         </li>
-          <div class="vr bg-secondary"></div>
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/logout"><strong>LOGOUT</strong></a>
+          <a class="nav-link text-secondary"  href=""><strong>PROJECT</strong></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-secondary"  href=""><strong>TECHNOLOGIES</strong></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-secondary"  href=""><strong></strong></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-secondary"  href="/login"><strong>LOGIN</strong></a>
         </li>
       </ul>
-         {% else %}
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/login"><strong>LOGIN</strong></a>
-        </li>
-          <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/sign_up"><strong>REGISTER</strong></a>
-        </li>
-      </ul>
-         {% endif %}
-
     </div>
   </div>
 </nav>
+{% endblock %}
+{% block content %}
+{# hero section #}
+<section class="text-light mb-2" style="background-color: #0096c7">
+        <div class="row align-items-center py-5">
+            <div class="col">
+            <img class="img-fluid p-5 ms-5" src="{% static 'WorkoutTracker/hero5.png' %}">
+            </div>
+            <div class='col me-5 p-5 text-center'>
+            <h2 class="text-secondary mb-5 display-1" style="font-size: 70px"><strong>Workout smart</strong></h2>
+            <p class="lead text-justify">
+            <strong>
+                    Are you tired of keeping track of your workouts on paper or in a disorganized spreadsheet?
+                    Do you want a convenient and easy way to monitor your progress and reach your fitness goals?
+                    Introducing the ultimate workout tracker application!
+            </strong>
+            </p>
+            <a class="btn btn-lg btn-secondary w-50 my-5" href="/sign_up"><strong>Try it out!</strong></a>
+            </div>
+        </div>
+</section>
+{# pitch #}
+<section>
+
+</section>
+{#card section#}
+<section class="p-5">
+<div class="row text-center gap-4">
+    <div class="col-md m-5">
+        <div class="card" style="background-color: #0096c7">
+            <div class="card-body text-center">
+                <i class="fa-sharp fa-regular fa-user text-secondary fa-7x pb-4"></i>
+                <h3 class="card-title text-light pb-4"><strong>User friendly</strong></h3>
+                <p class="card-text text-light">
+                    Our app features a user-friendly interface that makes tracking your workouts a breeze.
+                    You can easily create workout routines and customize them to your liking.
+                    You can also log the sets, reps, and weight lifted for each exercise.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md m-5">
+        <div class="card" style="background-color: #0096c7">
+            <div class="card-body text-center">
+                <i class="fa-sharp fa-regular fa-clipboard text-secondary fa-7x pb-4"></i>
+                <h3 class="card-title text-light pb-4"><strong>Ready to use</strong></h3>
+                <p class="card-text text-light">
+                    You can use one of our built-in workout templates based on some of the most popular plans in the fitness world like
+                    Full Body Workout, Push/Pull/Legs or classic 3-day Split.
+                    Build your own templates with over 50 exercises form the Exercise Atlas.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md m-5">
+        <div class="card" style="background-color: #0096c7">
+            <div class="card-body text-center">
+                <i class="fa-solid fa-chart-line text-secondary fa-7x pb-4"></i>
+                <h3 class="card-title text-light pb-4"><strong>Advanced Analytics</strong></h3>
+                <p class="card-text text-light">
+                    The app also provides detailed analytics and progress reports,
+                    allowing you to see how far you've come and identify areas for improvement.
+                    You can also set goals for yourself and track your progress towards achieving them.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{# about section #}
+<section class="text-secondary">
+        <div class="row align-items-center py-5 text-center">
+            <div class="col">
+            <img class="img-fluid p-5 me-5" src="{% static 'WorkoutTracker/Screenshot2.png' %}">
+            </div>
+            <div class='col ps-5'>
+            <p class="lead text-justify">
+            <strong>
+                This is my final fullstack project for Coderslab Python Developer Bootcamp
+                with Python/Django backend and Javascript ES6 and Material Design Bootstrap on the frontend.
+                This app lets you log your workout based on previously created template. You can try it out by simply
+                clicking login with the initial username and password.
+            </strong>
+            </p>
+            <a class="btn btn-lg btn-secondary w-50 my-5" href="/sign_up"><strong>Try it out!</strong></a>
+            <h1 class="text-center text-secondary pt-5" style="font-size: 40px"><strong>Technology stack</strong></h1>
+    <div class='row justify-content-around align-items-center text-secondary text-center' style="font-size: 24px">
+        <div class="col-md"><i class="fa-brands fa-python fa-3x"></i></div>
+        <div class="col-md"><i class="fa-brands fa-js fa-3x"></i></div>
+        <div class="col-md"><i class="fa-brands fa-mdb fa-3x"></i></div>
+        <div class="col-md"><img class="img-fluid" src="{% static 'WorkoutTracker/postgresql .png' %}"></div>
+        <div class="col-md"><img class="img-fluid" src="{% static 'WorkoutTracker/django.ico' %}"></div>
+    </div>
+            </div>
+        </div>
+</section>
+
+
 {% endblock %}

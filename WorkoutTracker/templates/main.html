@@ -13,11 +13,6 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
               rel="stylesheet"
             />
-            <!-- Google Fonts -->
-            <link
-              href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-              rel="stylesheet"
-            />
             <!-- MDB -->
             <link
               href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css"
@@ -26,67 +21,59 @@
             <link
 
             />
-                        <link rel="stylesheet" href="{% static 'WorkoutTracker/color.css' %}">
-
-            />
+            <link rel="stylesheet" href="{% static 'WorkoutTracker/color.css' %}">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Gajraj+One&family=Prompt&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="{% static 'WorkoutTracker/styles.css' %}">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         {% endblock %}
     {% endblock %}
 </head>
-
-<body style="background-color:#a9d6e5">
-
+<body>
 {% block navbar %}
 <nav class="navbar navbar-expand-lg navbar fixed-top text-secondary" style="background-color: #0096c7">
   <div class="container-fluid">
-      <a class="navbar-brand text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/main"><strong>NEW GYM</strong></a>
-      <div class="vr bg-secondary"></div>
+  {% if user.is_authenticated %}
+      <a class="navbar-brand text-secondary me-4 logo" href="/main">NEW GYM</a>
+  {% else %}
+      <a class="navbar-brand text-secondary me-4 logo" href="/landing">NEW GYM</a>
+  {% endif %}
     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout"><strong>NEW WORKOUT</strong></a>
+            <a class="nav-link text-secondary me-2" href="/create_workout"><strong>NEW WORKOUT</strong></a>
         </li>
-          <div class="vr bg-secondary"></div>
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_list"><strong>WORKOUT HISTORY</strong></a>
+          <a class="nav-link text-secondary me-2" href="/workout_template_list"><strong>TEMPLATES</strong></a>
         </li>
-          <div class="vr bg-secondary"></div>
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/workout_template_list"><strong>WORKOUT TEMPLATES</strong></a>
+          <a class="nav-link text-secondary me-2" href="/workout_list"><strong>WORKOUT HISTORY</strong></a>
         </li>
-          <div class="vr bg-secondary"></div>
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_workout_template"><strong>NEW WORKOUT TEMPLATE</strong></a>
-        </li>
-        <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/exercise_list"><strong>EXERCISES</strong></a>
-        </li>
-        <div class="vr bg-secondary"></div>
-        <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/create_exercise"><strong>NEW EXERCISE</strong></a>
+          <a class="nav-link text-secondary" href="/exercise_list"><strong>EXERCISES</strong></a>
         </li>
       </ul>
         {% if user.is_authenticated %}
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href=""><strong>{{ user.username }}</strong></a>
+          <a class="nav-link text-secondary" href=""><strong>{{ user.username }}</strong></a>
         </li>
-          <div class="vr bg-secondary"></div>
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/logout"><strong>LOGOUT</strong></a>
+          <a class="nav-link text-secondary" href="/logout"><strong>LOGOUT</strong></a>
         </li>
       </ul>
          {% else %}
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/login"><strong>LOGIN</strong></a>
+          <a class="nav-link text-secondary"  href="/login"><strong>LOGIN</strong></a>
         </li>
-          <div class="vr bg-secondary"></div>
         <li class="nav-item">
-          <a class="nav-link text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/sign_up"><strong>REGISTER</strong></a>
+          <a class="nav-link text-secondary" href="/sign_up"><strong>REGISTER</strong></a>
         </li>
       </ul>
          {% endif %}
@@ -99,33 +86,26 @@
 <section>
 {% if user.is_authenticated %}
 <div class="container-fluid py-5">
-{#    <div class="row justify-content-center">#}
-{#        <div class="col-sm-3 mt-5 p-1 me-5 text-center btn border border-secondary border-5" style="background-color:#0096c7">#}
-{#            <i class="fa-solid fa-dumbbell  text-secondary" style="font-size: 140px"></i>#}
-{#            <h2 class="text-center text-secondary" style="font-family: 'Noto Sans Mono CJK TC'">#}
-{#                <strong>WORKOUT</strong>#}
-{#            </h2>#}
-{#        </div>#}
-{#    </div>#}
 {% if unfinished_workouts %}
-    <div class="row justify-content-center">
-        <div class="col-sm-6 mt-5 p-5 me-5">
+    <div class="row justify-content-start">
+        <div class="col-lg-6 mt-5 p-5">
         <div class="container rounded-4 p-3 shadow-5-strong text-light border border-secondary border-5 text-center" id="workout_container" style="background-color:#0096c7">
-        <h3 class="text-secondary pb-3" style="font-family: 'Noto Sans Mono CJK TC'"><strong>YOU HAVE UNFINISHED WORKOUTS/TEMPLATES</strong></h3>
+        <h3 class="text-secondary pb-3"><strong>YOU HAVE UNFINISHED WORKOUTS/TEMPLATES</strong></h3>
             {% for workout in unfinished_workouts %}
                 {% if workout.is_template %}
-                <h5 class="pb-2"><a class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/edit_workout_template/{{ workout.template.pk }}"><strong>{{ workout.template.name}}</strong></a></h5>
+                <h5 class="pb-2"><a class="text-secondary" href="/edit_workout_template/{{ workout.template.pk }}"><strong>{{ workout.template.name}}</strong></a></h5>
                 {% endif %}
                 {% if workout.is_template == False %}
-                 <h5 class="pb-2"><a class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/edit_workout/{{ workout.pk }}"><strong>{{ workout.template.name }} | {{ workout.created|date:'d M Y'}}</strong></a></h5>
+                 <h5 class="pb-2"><a class="text-secondary" href="/edit_workout/{{ workout.pk }}"><strong>{{ workout.template.name }} | {{ workout.created|date:'d M Y'}}</strong></a></h5>
                 {% endif %}
             {% endfor %}
         </div>
         </div>
     </div>
 {% endif %}
-    <div class="row justify-content-center">
-        <div class="col-sm-6 mt-5 p-5 me-5">
+    <div class="row">
+    {% if last_workout %}
+        <div class="col-lg-6 mt-4 p-5">
             {% with 'LAST WORKOUT' as headline%}
             {% with last_workout as workout %}
             {% with last_workout_dict as workout_dict %}
@@ -136,6 +116,11 @@
             {% endwith %}
             {% endwith %}
         </div>
+    {% else %}
+    {% endif %}
+    <div class="col-lg-6 mt-4 p-5">
+    <img class="img-fluid rounded-4 "src="{% static 'WorkoutTracker/main2.jpg' %}">
+    </div>
     </div>
 </div>
 {% endif %}

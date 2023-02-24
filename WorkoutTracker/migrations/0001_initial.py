@@ -26,6 +26,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
                 ('equipment_needed', models.ManyToManyField(to='WorkoutTracker.equipment')),
+                ('sample', models.BooleanField(default=False))
             ],
         ),
         migrations.CreateModel(

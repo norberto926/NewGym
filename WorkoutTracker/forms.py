@@ -3,7 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
-from WorkoutTracker.models import Exercise, Equipment, Muscle, Workout, WorkoutTemplate, Set
+from WorkoutTracker.models import Exercise, Equipment, WorkoutTemplate, Set
+
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -13,15 +14,16 @@ class RegisterForm(UserCreationForm):
 
 class ExerciseForm(forms.ModelForm):
     equipment_needed = forms.ModelMultipleChoiceField(queryset=Equipment.objects.all(),
-                                                      widget=forms.CheckboxSelectMultiple)
+                                                      widget=forms.CheckboxSelectMultiple, blank=True, required=False)
 
     class Meta:
         model = Exercise
-        fields = '__all__'
+        fields = ['name', 'main_muscle_group', 'description']
 
 
 class WorkoutTemplateForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control w-75 text-light bg-secondary', 'style':'text-align:center;'}), label='')
+
     class Meta:
         model = WorkoutTemplate
         fields = ['name']
@@ -33,13 +35,14 @@ class AddExerciseForm(forms.Form):
 
 class SetFormWorkoutTemplate(forms.ModelForm):
     repetitions = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
+
     class Meta:
         model = Set
         fields = ['repetitions']
 
 
 class SetFormWorkout(forms.ModelForm):
-    load = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
+    load = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
     repetitions = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
     done = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input text-light bg-secondary'}))
 

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, MainPageView, edit_workout_template, \
     WorkoutTemplateList, ExerciseList, AddExercise, DeleteExercise, CreateWorkout, edit_workout, ArchiveTemplate, \
-    WorkoutDetails, WorkoutList, CreateUser, DeleteWorkout
+    WorkoutDetails, WorkoutList, CreateUser, DeleteWorkout, LandingPage, DeleteWorkoutExercise
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,11 +30,13 @@ urlpatterns = [
     path('workout_template_list', WorkoutTemplateList.as_view(), name='workout_template_list'),
     path('exercise_list', ExerciseList.as_view(), name='exercise_list'),
     path('add_exercise/<int:workout_template_pk>', AddExercise.as_view(), name='add_exercise'),
-    path('delete_exercise/<int:workout_template_pk>/<int:workout_exercise_pk>', DeleteExercise.as_view(), name='delete_exercise'),
+    path('delete_workout_exercise/<int:workout_template_pk>/<int:workout_exercise_pk>', DeleteWorkoutExercise.as_view(), name='delete_workout_exercise'),
     path('create_workout', CreateWorkout.as_view(), name='create_workout'),
     path('archive_template/<int:workout_template_pk>', ArchiveTemplate.as_view(), name='archive_template'),
     path('workout_details/<int:workout_pk>', WorkoutDetails.as_view(), name='workout_details'),
     path('workout_list', WorkoutList.as_view(), name='workout_list'),
     path('sign_up', CreateUser.as_view(), name='sign_up'),
-    path('delete_workout/<int:workout_pk>', DeleteWorkout.as_view(), name='delete_workout')
+    path('delete_workout/<int:workout_pk>', DeleteWorkout.as_view(), name='delete_workout'),
+    path('landing', LandingPage.as_view(), name='landing'),
+    path('delete_exercise/<int:exercise_pk>', DeleteExercise.as_view(), name='delete_exercise')
 ]

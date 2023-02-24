@@ -1,15 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add new exercise</title>
-</head>
-<body>
+{% extends "main.html" %}
+{% block content %}
+{% load widget_tweaks %}
+<section class="py-5 d-flex justify-content-center">
+<div class="container p-3 m-5 justify-content-center border border-secondary border-5 rounded-4" style="background-color:#0096c7">
 <form method="POST">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Add exercise">
-</form>
+    <div class="row">
+        <div class="col">
+            <h5 class="text-secondary text-center" style="font-family: 'Noto Sans Mono CJK TC'"><strong>NAME</strong></h5>
+            {% render_field form.name class='form-control text-light bg-secondary'%}
+            <h5 class="text-secondary text-center mt-5" style="font-family: 'Noto Sans Mono CJK TC'"><strong>DESCRIPTION</strong></h5>
+            {% render_field form.description class='form-control text-light bg-secondary'%}
 
+        </div>
+        <div class="col-4">
+            <h5 class="text-secondary text-center" style="font-family: 'Noto Sans Mono CJK TC'"><strong>EQUIPMENT</strong></h5>
+            <button class="btn btn-secondary w-100" type="button" style="font-family: 'Noto Sans Mono CJK TC'" data-mdb-toggle="collapse" data-mdb-target="#equipment" aria-expanded="false" aria-controls="equipment"><i class="fa-solid fa-chevron-down fa-xl"></i></button>
+            <div class="collapse" id="equipment">
+                <div class="card card-body bg-secondary text-light">
+                {% render_field form.equipment_needed class='form-check form-check-inline text-light'%}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <h5 class="text-secondary text-center" style="font-family: 'Noto Sans Mono CJK TC'"><strong>MAIN MUSCLE GROUP</strong></h5>
+            {% render_field form.main_muscle_group class='form-select text-light bg-secondary'%}
+        </div>
+    </div>
+    <div class="col text-center py-3">
+    <button class="btn btn-lg btn-secondary px-5 m-4 w-25"type="submit"><i class="fa-solid fa-floppy-disk fa-xl me-3"></i><strong>SAVE</strong></button>
+    {% if error_message %}
+    <h5 class="text-light pb-3">{{ error_message }}</h5>
+    {% endif %}
+    </div>
+</form>
+</div>
+</section>
+{% endblock %}
 </body>
 </html>

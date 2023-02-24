@@ -1,13 +1,16 @@
 {% extends 'main.html' %}
 {% load widget_tweaks %}
 {% block content %}
-<section class="d-flex justify-content-center">
+<section class="d-flex justify-content-center p-5">
     <div class="w-75 p-5 mt-5 d-flex justify-content-center border border-secondary border-5 rounded-4 text-center" style="background-color:#0096c7">
         <form method="POST">
             {% csrf_token %}
-            <h4 class="text-secondary pb-3" style="font-family: 'Noto Sans Mono CJK TC'"><strong>WORKOUT TEMPLATE NAME</strong></h4>
+            <h4 class="text-secondary pb-3"><strong>WORKOUT TEMPLATE NAME</strong></h4>
             {% render_field workout_template_form.name class='form-control text-light bg-secondary w-100 mb-3'%}
             <button class="btn btn-lg btn-secondary w-100 mt-3"type="submit"><i class="fa-solid fa-floppy-disk fa-xl me-3"></i><strong>Save</strong></button>
+            {% if error_message %}
+            <h5 class="text-light pb-3">{{ error_message }}</h5>
+            {% endif %}
         </form>
     </div>
 </section>

@@ -5,7 +5,7 @@
 
 {% block content %}
     <section class="text-center text-light m-5 d-flex justify-content-center">
-    <div class="w-50 p-4 m-5 justify-content-center border border-secondary border-0 rounded-4" style="background-color:#0096c7">
+    <div class="p-md-4 m-md-5 justify-content-center border border-secondary border-0 rounded-4" style="background-color:#0096c7">
     <form method="POST">
         {% csrf_token %}
         {% for exercise, formset in workout_dict.items %}
@@ -13,7 +13,7 @@
             <div class="pb-2">
                 <div class="row justify-content-between pb-3">
                     <div class="col text-start">
-                        <h3 class="text-secondary"style="font-family: 'Noto Sans Mono CJK TC'"><strong>{{ exercise.exercise|upper }}</strong></h3>
+                        <h3 class="text-secondary"><strong>{{ exercise.exercise|upper }}</strong></h3>
                     </div>
                 </div>
                 <hr class="hr-blurry"/>
@@ -21,7 +21,7 @@
                     <div class="col-3 text-start">
                         <strong>SETS</strong>
                     </div>
-                    <div class="col-3 text-start"><STRONG>REPETITIONS</STRONG></div>
+                    <div class="col-3 text-start"><STRONG>REPS</STRONG></div>
                     <div class="col-3 text-start"><STRONG>LOAD</STRONG></div>
                     <div class="col-2 text-center"><strong>DONE</strong></div>
                 </div>

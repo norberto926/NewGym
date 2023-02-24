@@ -2,8 +2,11 @@
 {% block content %}
 <section class="py-5">
 <div class="container py-5">
+    <div class="container p-3 mb-3 justify-content-center border border-secondary border-5 rounded-4 text-center" style="background-color:#0096c7">
+        <a class="btn btn-lg btn-secondary px-5 m-4 w-25" href="/create_workout_template"><i class="fa-solid fa-plus fa-xl me-3"></i><strong>CREATE NEW TEMPLATE</strong></a>
+    </div>
     <table class="table table-hover rounded-4 shadow-5 text-light text-center border border-secondary border-5 rounded-4" style="background-color: #0096c7">
-        <thead class="text-secondary text-nowrap" style="font-family: 'Noto Sans Mono CJK TC'">
+        <thead class="text-secondary text-nowrap">
             <tr>
                 <th class="text-start"><strong>TEMPLATE</strong></th>
                 <th><strong>CREATED</strong></th>
@@ -16,7 +19,7 @@
         <tbody>
             {% for workout_template, data in workout_template_dict.items %}
                 <tr>
-                    <td class="text-start"><h5><a class="text-secondary" style="font-family: 'Noto Sans Mono CJK TC'" href="/edit_workout_template/{{ workout_template.pk }}"><strong>{{ workout_template.name|upper }}</strong></a></h5></td>
+                    <td class="text-start"><h5><a class="text-secondary" href="/edit_workout_template/{{ workout_template.pk }}"><strong>{{ workout_template.name|upper }}</strong></a></h5></td>
                     <td>{{ workout_template.created|date:'d M Y' }}</td>
                     <td>{%  for exercise in data.all_exercises %}
                             {{ exercise.exercise }} |
