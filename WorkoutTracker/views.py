@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
@@ -5,6 +7,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.db import IntegrityError
 from django.contrib.auth import login
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from WorkoutTracker.database_population import populate_exercises_on_registration, populate_templates_on_registration
 from WorkoutTracker.filters import ExerciseFilter
@@ -386,6 +391,35 @@ class DeleteWorkout(LoginRequiredMixin, View):
 class LandingPage(View):
     def get(self, request):
         return render(request, 'landing_page.html')
+
+
+class Analytics(LoginRequiredMixin, View):
+
+    def get(self, request):
+        templates = WorkoutTemplate.objects.filter(owner=request.user)
+        return render(request, 'analytics.html')
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def date_filter(request):
+    date_from = request.query_params.get('date_from')
+    if not date_from:
+        date_from = request.user.date_joined
+    date_to = request.query_params.get('date_to')
+    if not date_to:
+        date_to = datetime.date.today()
+    template = request.query_params.get('template')
+    all_workouts = Workout.objects.filter(is_template=False, owner=request.user, finished=True, created__gte=date_from, created__lte=date_to)
+    labels = []
+    dataset = []
+    for workout in all_workouts:
+        labels.append(workout.id)
+        dataset.append(calculate_totals_for_workout(workout)[2])
+    return Response({'labels': labels, 'dataset': dataset})
+
+
+
 
 
 

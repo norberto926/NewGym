@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'WorkoutTracker',
     'fontawesomefree',
     'crispy_forms',
-    'widget_tweaks'
+    'widget_tweaks',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

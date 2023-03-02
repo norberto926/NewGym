@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, MainPageView, edit_workout_template, \
     WorkoutTemplateList, ExerciseList, AddExercise, DeleteExercise, CreateWorkout, edit_workout, ArchiveTemplate, \
-    WorkoutDetails, WorkoutList, CreateUser, DeleteWorkout, LandingPage, DeleteWorkoutExercise
+    WorkoutDetails, WorkoutList, CreateUser, DeleteWorkout, LandingPage, DeleteWorkoutExercise, Analytics, \
+    date_filter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,5 +39,7 @@ urlpatterns = [
     path('sign_up', CreateUser.as_view(), name='sign_up'),
     path('delete_workout/<int:workout_pk>', DeleteWorkout.as_view(), name='delete_workout'),
     path('landing', LandingPage.as_view(), name='landing'),
-    path('delete_exercise/<int:exercise_pk>', DeleteExercise.as_view(), name='delete_exercise')
+    path('delete_exercise/<int:exercise_pk>', DeleteExercise.as_view(), name='delete_exercise'),
+    path('analytics', Analytics.as_view(), name='analytics'),
+    path('date_filter/', date_filter, name='date_filter')
 ]

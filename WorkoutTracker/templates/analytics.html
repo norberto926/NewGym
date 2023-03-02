@@ -1,0 +1,76 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+
+<div class="p-5 mt-5">
+  <canvas id="myChart"></canvas>
+</div>
+        <label>
+            From: <input type="date" name="from" id="date_from">
+        </label>
+        <label>
+            To: <input type="date" name="to" id="date_to">
+        </label>
+        <label>
+        Workout template:
+            <select id="template" name="template">
+                {% for template in templates %}
+                    <option value="{{ template.pk }}">{{ template.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit" class="btn btn-secondary date-filter">Filter</button>
+{% endblock %}
+{% block script %}
+<!-- MDB -->
+
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
+
+></script>
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+  const ctx = document.getElementById('myChart');
+  const dateFilterButton = document.getElementsByClassName('date-filter')[0]
+
+    const generalProgression = async () => {
+      const response = await fetch(`/general_progression`)
+      const data = await response.json()
+            const progressionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'General progression',
+                        data: data.dataset,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+
+  }
+
+  document.addEventListener("DOMContentLoaded", generalProgression)
+  const dateFiltering = async () => {
+      const dateFrom = document.getElementById('date_from').value
+      const dateTo = document.getElementById('date_to').value
+      const response = await fetch(`/general_progression/?date_from=${dateFrom}&date_to=${dateTo}&template=${template}`)
+  }
+  dateFilterButton.addEventListener('click', dateFiltering) /* have to do another function for updating chart */
+</script>
+
+{% endblock %}
+
+</body>
+</html>
