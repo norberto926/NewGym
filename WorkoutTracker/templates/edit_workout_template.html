@@ -42,7 +42,7 @@
             <div id="set-form-list-{{ exercise.exercise|lower }}">
             {{ formset.management_form }}
                 {% for form in formset %}
-                    <div class="set-form-{{ exercise.exercise|lower }} row mb-1">
+                    <div class="set-form-{{ exercise.exercise|lower }} mb-1 row">
                         <div class="col-4 text-start">
                              <span class="set-order-{{ exercise.exercise|lower }} d-inline">{{ forloop.counter }}</span>
                         </div>
@@ -67,7 +67,9 @@
                     <span class="set-order-{{ exercise.exercise|lower }} d-inline"></span>
                 </div>
                 <div class="col-4">
-                    {% render_field formset.empty_form.repetitions class='form-control w-50 text-light bg-secondary', style='text-align:center;' %}
+                    {{ formset.empty_form.repetitions }}
+                    {{ formset.empty_form.workout_exercise }}
+                    {{ formset.empty_form.id }}
                 </div>
                 <div class="col-4 text-end">
                     <button class="btn btn-secondary" type="button"><i class="fa-solid fa-trash fa-xl pe-2"></i>{{ formset.empty_form.DELETE }}</button>

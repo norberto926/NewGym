@@ -46,13 +46,17 @@
                         <form method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="exercise_pk" value="{{ exercise.pk }}">
-                            <button class="btn btn-link btn-lg text-secondary p-1 fw-bold fw" style="font-family: 'Noto Sans Mono CJK TC'" type="submit">{{ exercise.name }}</button>
+                            <button class="btn btn-link btn-lg text-secondary p-1 fw-bold fw" type="submit">{{ exercise.name }}</button>
                         </form>
                     </td>
                     <td> {{ exercise.main_muscle_group }}</td>
                     <td>
                         {%  for equipment in exercise.equipment_needed.all %}
+                            {% if  forloop.last %}
+                            {{ equipment }}
+                            {% else %}
                             {{ equipment }} |
+                            {% endif %}
                         {% endfor %}
                     </td>
                 </tr>

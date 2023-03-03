@@ -70,7 +70,7 @@ class WorkoutExercise(models.Model):
 
 
 class Set(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     workout_exercise = models.ForeignKey(WorkoutExercise, on_delete=models.CASCADE)

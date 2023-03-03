@@ -39,7 +39,7 @@ def calculate_totals_for_workout(workout):
             total_sets += 1
             total_repetitions += set.repetitions
             if set.load:
-                total_load += set.load
+                total_load += set.load * set.repetitions
     return total_sets, total_repetitions, total_load
 
 
@@ -137,9 +137,9 @@ def edit_workout_template(request, workout_template_pk):
     SetFormset = inlineformset_factory(WorkoutExercise, Set, form=SetFormWorkoutTemplate, can_delete=True, extra=0)
     workout_dict = {}
     if request.method == 'GET':
-        for exercise in workout_exercises:
-            formset = SetFormset(instance=exercise, prefix=exercise.exercise)
-            workout_dict[exercise] = formset
+        for workout_exercise in workout_exercises:
+            formset = SetFormset(instance=workout_exercise, prefix=workout_exercise.exercise)
+            workout_dict[workout_exercise] = formset
         ctx = {'template_form': template_form,
                    'workout_dict': workout_dict
                 }
@@ -154,7 +154,6 @@ def edit_workout_template(request, workout_template_pk):
             for index, form in enumerate(formset):
                 if form.is_valid():
                     new_set = form.save(commit=False)
-                    new_set.owner = request.user
                     if not new_set.order:
                         new_set.order = index + 1
                     if new_set.repetitions:
@@ -162,13 +161,15 @@ def edit_workout_template(request, workout_template_pk):
             for form in formset.deleted_forms:
                 if form.instance.pk:
                     form.instance.delete()
-            sets = Set.objects.filter(workout_exercise=exercise, owner=request.user)
+        workout_exercises = WorkoutExercise.objects.filter(workout=workout, owner=request.user)
+        for workout_exercise in workout_exercises:
+            sets = Set.objects.filter(workout_exercise=workout_exercise)
             if not sets:
-                exercise.delete()
-            workout_exercises = WorkoutExercise.objects.filter(workout=workout, owner=request.user)
-            if workout_exercises:
-                workout.finished = True
-                workout.save()
+                workout_exercise.delete()
+        workout_exercises = WorkoutExercise.objects.filter(workout=workout, owner=request.user)
+        if workout_exercises:
+            workout.finished = True
+            workout.save()
             return redirect('/main')
         return redirect('workout_template_list')
 
@@ -183,7 +184,7 @@ class WorkoutTemplateList(LoginRequiredMixin, View):
             all_exercises = WorkoutExercise.objects.filter(workout=workout, owner=request.user)
             all_sets_count = 0
             for workout_exercise in all_exercises:
-                set_count = Set.objects.filter(workout_exercise=workout_exercise, owner=request.user).count()
+                set_count = Set.objects.filter(workout_exercise=workout_exercise).count()
                 all_sets_count += set_count
             workouts_done_with_template = Workout.objects.filter(template=workout_template, is_template=False, owner=request.user).order_by('-created')
             if len(workouts_done_with_template) == 0:
@@ -234,7 +235,7 @@ class AddExercise(LoginRequiredMixin, View):
         exercises_in_workout = WorkoutExercise.objects.filter(workout=workout, owner=request.user)
         for workout_exercise in exercises_in_workout:
             if workout_exercise.exercise == exercise:
-                return redirect('edit_workout_template', workout_template_pk=workout_template_pk) # jak zrobić to przekierowanie z komunikatem
+                return redirect('edit_workout_template', workout_template_pk=workout_template_pk)
         new_workout_exercise = WorkoutExercise.objects.create(exercise=exercise, workout=workout, order=len(exercises_in_workout) + 1, owner=request.user)
         return redirect('edit_workout_template', workout_template_pk=workout_template_pk)
 
@@ -266,7 +267,7 @@ class CreateWorkout(LoginRequiredMixin, View):
             all_exercises = WorkoutExercise.objects.filter(workout=workout)
             all_sets_count = 0
             for workout_exercise in all_exercises:
-                set_count = Set.objects.filter(workout_exercise=workout_exercise, owner=request.user).count()
+                set_count = Set.objects.filter(workout_exercise=workout_exercise).count()
                 all_sets_count += set_count
             workouts_done_with_template = Workout.objects.filter(template=workout_template, is_template=False, owner=request.user).order_by('-created')
             if len(workouts_done_with_template) == 0:
@@ -300,16 +301,16 @@ class CreateWorkout(LoginRequiredMixin, View):
                                                                       workout=new_workout, owner=request.user)
                 for set in last_workout_sets:
                     new_set = Set.objects.create(workout_exercise=new_workout_exercise, load=0,
-                                                 repetitions=set.repetitions, order=set.order, owner=request.user)
+                                                 repetitions=set.repetitions, order=set.order)
         else:
             last_workout_exercises = WorkoutExercise.objects.filter(workout=last_workout_with_template)
             for exercise in last_workout_exercises:
-                last_workout_sets = Set.objects.filter(workout_exercise=exercise, owner=request.user)
+                last_workout_sets = Set.objects.filter(workout_exercise=exercise)
                 new_workout_exercise = WorkoutExercise.objects.create(exercise=exercise.exercise, order=exercise.order,
                                                                       workout=new_workout, owner=request.user)
                 for set in last_workout_sets:
                     new_set = Set.objects.create(workout_exercise=new_workout_exercise, load=set.load,
-                                                 repetitions=set.repetitions, order=set.order, owner=request.user)
+                                                 repetitions=set.repetitions, order=set.order)
         return redirect('edit_workout', workout_pk=new_workout.pk)
 
 @login_required
@@ -338,7 +339,7 @@ def edit_workout(request, workout_pk):
                     new_set.save()
                 if not form.cleaned_data.get('done'):
                     form.instance.delete()
-            sets = Set.objects.filter(workout_exercise=exercise, owner=request.user)
+            sets = Set.objects.filter(workout_exercise=exercise)
             if not sets:
                 exercise.delete()
         new_workout_exercises = WorkoutExercise.objects.filter(workout=new_workout, owner=request.user)
@@ -394,29 +395,126 @@ class LandingPage(View):
 
 
 class Analytics(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request):
-        templates = WorkoutTemplate.objects.filter(owner=request.user)
-        return render(request, 'analytics.html')
+
+        templates = WorkoutTemplate.objects.filter(owner=request.user, workout__is_template=False).distinct()
+        exercises = Exercise.objects.filter(owner=request.user, workoutexercise__workout__is_template=False).order_by('name').distinct()
+        ctx = {
+            'templates': templates,
+            'exercises': exercises,
+        }
+        return render(request, 'analytics.html', ctx)
+
+
+
 
 
 @api_view()
 @permission_classes([IsAuthenticated])
-def date_filter(request):
+def general_progression(request):
     date_from = request.query_params.get('date_from')
     if not date_from:
         date_from = request.user.date_joined
     date_to = request.query_params.get('date_to')
     if not date_to:
-        date_to = datetime.date.today()
-    template = request.query_params.get('template')
+        date_to = datetime.datetime.now()
+    template_pk = request.query_params.get('template_pk')
+    if template_pk == 'all' or not template_pk:
+        all_workouts = Workout.objects.filter(is_template=False, owner=request.user, finished=True, created__gte=date_from, created__lte=date_to)
+    else:
+        template = WorkoutTemplate.objects.get(id=template_pk)
+        all_workouts = Workout.objects.filter(is_template=False, owner=request.user, finished=True, created__gte=date_from, created__lte=date_to, template=template)
+    labels = []
+    dataset = []
+    for workout in all_workouts:
+        labels.append(workout.created.date())
+        dataset.append(calculate_totals_for_workout(workout)[2])
+    return Response({'labels': labels, 'dataset': dataset})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def exercise_progression(request):
+    date_from = request.query_params.get('date_from')
+    if not date_from:
+        date_from = request.user.date_joined
+    date_to = request.query_params.get('date_to')
+    if not date_to:
+        date_to = datetime.datetime.now()
+    exercise_pk = request.query_params.get('exercise_pk')
+    if exercise_pk:
+        exercise = Exercise.objects.get(id=int(exercise_pk))
+    else:
+        last_workout = Workout.objects.filter(owner=request.user, finished=True, is_template=False).order_by('-created')[0]
+        first_exercise = WorkoutExercise.objects.filter(workout=last_workout, owner=request.user).first()
+        exercise = first_exercise.exercise
     all_workouts = Workout.objects.filter(is_template=False, owner=request.user, finished=True, created__gte=date_from, created__lte=date_to)
     labels = []
     dataset = []
     for workout in all_workouts:
-        labels.append(workout.id)
-        dataset.append(calculate_totals_for_workout(workout)[2])
+        workout_exercises = WorkoutExercise.objects.filter(workout=workout, exercise=exercise, owner=request.user)
+        if workout_exercises:
+            workout_exercise = workout_exercises[0]
+            sets = Set.objects.filter(workout_exercise=workout_exercise)
+            total_load = 0
+            load_per_set = total_load/len(sets)
+            sets = Set.objects.filter(workout_exercise=workout_exercise)
+            for set in sets:
+                if set.load:
+                    total_load += set.load * set.repetitions
+            labels.append(workout_exercise.workout.created.date())
+            dataset.append(total_load)
     return Response({'labels': labels, 'dataset': dataset})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def sets_per_muscle(request):
+    date_from = request.query_params.get('date_from')
+    if not date_from:
+        date_from = request.user.date_joined
+    date_to = request.query_params.get('date_to')
+    if not date_to:
+        date_to = datetime.datetime.now()
+    all_workouts = Workout.objects.filter(is_template=False, owner=request.user, finished=True, created__gte=date_from, created__lte=date_to)
+    muscle_dict = {}
+    for workout in all_workouts:
+        workout_exercises = WorkoutExercise.objects.filter(workout=workout)
+        for workout_exercise in workout_exercises:
+            set_count = Set.objects.filter(workout_exercise=workout_exercise).count()
+            if workout_exercise.exercise.main_muscle_group.name in muscle_dict.keys():
+                muscle_dict[workout_exercise.exercise.main_muscle_group.name] += set_count
+            else:
+                muscle_dict[workout_exercise.exercise.main_muscle_group.name] = set_count
+    labels = list(muscle_dict.keys())
+    dataset = list(muscle_dict.values())
+    return Response({'labels': labels, 'dataset': dataset})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def totals(request):
+    date_from = request.query_params.get('date_from')
+    if not date_from:
+        date_from = request.user.date_joined
+    date_to = request.query_params.get('date_to')
+    if not date_to:
+        date_to = datetime.datetime.now()
+    all_workouts = Workout.objects.filter(is_template=False, owner=request.user, finished=True, created__gte=date_from, created__lte=date_to)
+    workout_count = all_workouts.count()
+    total_load = 0
+    total_sets = 0
+    total_repetitions = 0
+    for workout in all_workouts:
+        totals = calculate_totals_for_workout(workout)
+        total_sets += totals[0]
+        total_repetitions += totals[1]
+        total_load += totals[2]
+    return Response({'workout_count': workout_count, 'total_load': total_load, 'total_sets': total_sets, 'total_repetitions': total_repetitions})
+
+
+
+
+
 
 
 

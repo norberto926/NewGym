@@ -1,25 +1,51 @@
 {% extends "main.html" %}
 {% load static %}
 {% block content %}
-
-<div class="p-5 mt-5">
-  <canvas id="myChart"></canvas>
-</div>
+    <div class="p-3 pt-5 m-5 justify-content-center border border-secondary border-5 rounded-4 text-center text-light" style="background-color:#0096c7">
         <label>
-            From: <input type="date" name="from" id="date_from">
+            From: <input type="date" name="from" id="date_from" class="form-control bg-secondary text-light">
         </label>
         <label>
-            To: <input type="date" name="to" id="date_to">
+            To: <input type="date" name="to" id="date_to" class="form-control bg-secondary text-light">
         </label>
         <label>
         Workout template:
-            <select id="template" name="template">
+            <select id="template" name="template" class="form-control bg-secondary text-light">
+                <option value="all">All</option>
                 {% for template in templates %}
                     <option value="{{ template.pk }}">{{ template.name }}</option>
                 {% endfor %}
             </select>
         </label>
-        <button type="submit" class="btn btn-secondary date-filter">Filter</button>
+            <label>
+        Exercise:
+            <select id="exercise" name="exercise" class="form-control bg-secondary text-light">
+                <option value="">---</option>
+                {% for exercise in exercises %}
+                    <option value="{{ exercise.pk }}">{{ exercise.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+    <div class="row justify-content-around">
+    <div class="p-5 mt-2 col-5">
+  <canvas id="generalProgressionChart"></canvas>
+</div>
+    <div class="p-5 mt-2 col-5">
+    <canvas id="exerciseProgressionChart"></canvas>
+    </div>
+    </div>
+       <div class="row justify-content-around">
+    <div class="p-5 mt-5 col-5">
+  <canvas id="setsPerMuscleChart"></canvas>
+</div>
+    <div class="p-2 pt-5 m-3 mt-5 justify-content-center col-5 text-secondary">
+        <h3 style="font-size: xxx-large" id="workout_count"></h3>
+        <h3 style="font-size: xxx-large" id="total_sets"></h3>
+        <h3 style="font-size: xxx-large" id="total_repetitions"></h3>
+        <h3 style="font-size: xxx-large" id="total_load"></h3>
+    </div>
+    </div>
 {% endblock %}
 {% block script %}
 <!-- MDB -->
@@ -34,42 +60,191 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-  const ctx = document.getElementById('myChart');
-  const dateFilterButton = document.getElementsByClassName('date-filter')[0]
+  const ctxGeneralProgressionChart = document.getElementById('generalProgressionChart')
+  const ctxExerciseProgressionChart = document.getElementById('exerciseProgressionChart')
+  const ctxSetsPerMuscleChart = document.getElementById('setsPerMuscleChart')
+  const dateFromInput = document.getElementById('date_from')
+  const dateToInput = document.getElementById('date_to')
 
     const generalProgression = async () => {
       const response = await fetch(`/general_progression`)
       const data = await response.json()
-            const progressionChart = new Chart(ctx, {
+             window.generalProgressionChart = new Chart(ctxGeneralProgressionChart, {
                 type: 'line',
                 data: {
                     labels: data.labels,
                     datasets: [{
-                        label: 'General progression',
+                        label: 'General progression [kg]',
                         data: data.dataset,
-                        borderWidth: 3
+                        borderWidth: 5
                     }]
                 },
                 options: {
                     scales: {
                         y: {
-                            beginAtZero: false
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            }
+                            
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+
                         }
                     }
                 }
             });
 
   }
+      const exerciseProgression = async () => {
+      const response = await fetch(`/exercise_progression`)
+      const data = await response.json()
+             window.exerciseProgressionChart = new Chart(ctxExerciseProgressionChart, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Exercise progression [kg]',
+                        data: data.dataset,
+                        borderWidth: 5
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            }
+
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+
+                        }
+                    }
+                }
+            });
+
+  }
+      const setsPerMuscle = async () => {
+      const response = await fetch(`/sets_per_muscle`)
+      const data = await response.json()
+             window.setsPerMuscleChart = new Chart(ctxSetsPerMuscleChart, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Sets per Muscle Group',
+                        data: data.dataset,
+                        borderWidth: 5
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            }
+
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+
+                        }
+                    }
+                }
+            });
+
+  }
+      const totals = async () => {
+          const response = await fetch(`/totals`)
+          const data = await response.json()
+          workoutCount = document.getElementById('workout_count')
+          workoutCount.innerHTML = `<i class="fa-solid fa-dumbbell fa-xl me-5"></i>Workouts: ${data.workout_count}`
+          totalSets = document.getElementById('total_sets')
+          totalSets.innerHTML = `<i class="fa-solid fa-stopwatch-20 fa-xl me-5"></i>Sets: ${data.total_sets}`
+          totalRepetitions = document.getElementById('total_repetitions')
+          totalRepetitions.innerHTML = `<i class="fa-solid fa-arrows-rotate fa-xl me-5"></i>Repetitions: ${data.total_sets}`
+          totalLoad = document.getElementById('total_load')
+          totalLoad.innerHTML = `<i class="fa-solid fa-weight-hanging fa-xl me-5"></i>Total load: ${data.total_load} kg`
+
+      }
 
   document.addEventListener("DOMContentLoaded", generalProgression)
-  const dateFiltering = async () => {
+  document.addEventListener("DOMContentLoaded", exerciseProgression)
+  document.addEventListener("DOMContentLoaded", setsPerMuscle)
+  document.addEventListener("DOMContentLoaded", totals)
+  const generalProgressionFiltering = async () => {
       const dateFrom = document.getElementById('date_from').value
       const dateTo = document.getElementById('date_to').value
-      const response = await fetch(`/general_progression/?date_from=${dateFrom}&date_to=${dateTo}&template=${template}`)
-  }
-  dateFilterButton.addEventListener('click', dateFiltering) /* have to do another function for updating chart */
-</script>
+      const template = document.getElementById('template').value
+      const response = await fetch(`/general_progression/?date_from=${dateFrom}&date_to=${dateTo}&template_pk=${template}`)
+      const  newData = await response.json()
+      generalProgressionChart.data.datasets[0].data = newData.dataset;
+      generalProgressionChart.data.labels = newData.labels;
+      generalProgressionChart.update()
 
+  }
+    const exerciseProgressionFiltering = async () => {
+      const dateFrom = document.getElementById('date_from').value
+      const dateTo = document.getElementById('date_to').value
+      const exercise = document.getElementById('exercise').value
+      const response = await fetch(`/exercise_progression/?date_from=${dateFrom}&date_to=${dateTo}&exercise_pk=${exercise}`)
+      const  newData = await response.json()
+      exerciseProgressionChart.data.datasets[0].data = newData.dataset;
+      exerciseProgressionChart.data.labels = newData.labels;
+      exerciseProgressionChart.update()
+
+  }
+      const setsPerMuscleFiltering = async () => {
+      const dateFrom = document.getElementById('date_from').value
+      const dateTo = document.getElementById('date_to').value
+      const response = await fetch(`/sets_per_muscle/?date_from=${dateFrom}&date_to=${dateTo}`)
+      const  newData = await response.json()
+      setsPerMuscleChart.data.datasets[0].data = newData.dataset;
+      setsPerMuscleChart.data.labels = newData.labels;
+      setsPerMuscleChart.update()
+
+  }
+
+        const totalsFiltering = async () => {
+          const dateFrom = document.getElementById('date_from').value
+          const dateTo = document.getElementById('date_to').value
+          const response = await fetch(`/totals/?date_from=${dateFrom}&date_to=${dateTo}`)
+          const data = await response.json()
+          workoutCount = document.getElementById('workout_count')
+          workoutCount.innerHTML = `<i class="fa-solid fa-dumbbell fa-xl me-5"></i>Workouts: ${data.workout_count}`
+          totalSets = document.getElementById('total_sets')
+          totalSets.innerHTML = `<i class="fa-solid fa-stopwatch-20 fa-xl me-5"></i>Sets: ${data.total_sets}`
+          totalRepetitions = document.getElementById('total_repetitions')
+          totalRepetitions.innerHTML = `<i class="fa-solid fa-arrows-rotate fa-xl me-5"></i>Repetitions: ${data.total_sets}`
+          totalLoad = document.getElementById('total_load')
+          totalLoad.innerHTML = `<i class="fa-solid fa-weight-hanging fa-xl me-5"></i>Total load: ${data.total_load} kg`
+
+      }
+  dateToInput.addEventListener('change', generalProgressionFiltering)
+  dateFromInput.addEventListener("change", generalProgressionFiltering)
+  dateToInput.addEventListener('change', exerciseProgressionFiltering)
+  dateFromInput.addEventListener("change", exerciseProgressionFiltering)
+  dateToInput.addEventListener('change', setsPerMuscleFiltering)
+  dateFromInput.addEventListener("change", setsPerMuscleFiltering)
+  dateToInput.addEventListener('change', totalsFiltering)
+  dateFromInput.addEventListener("change", totalsFiltering)
+
+  templateSelect = document.getElementById('template')
+  templateSelect.addEventListener('change', generalProgressionFiltering)
+  exerciseSelect = document.getElementById('exercise')
+  exerciseSelect.addEventListener('change', exerciseProgressionFiltering)
+</script>
 {% endblock %}
 
 </body>
