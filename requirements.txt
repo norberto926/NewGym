@@ -4,7 +4,7 @@ attrs==22.2.0
 backcall==0.2.0
 decorator==5.1.1
 dj-config-url==0.1.1
-Django==4.1.4
+Django==4.1.7
 django-crispy-forms==1.14.0
 django-filter==22.1
 django-widget-tweaks==1.4.12
