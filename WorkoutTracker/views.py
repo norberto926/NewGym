@@ -391,7 +391,10 @@ class DeleteWorkout(LoginRequiredMixin, View):
 
 class LandingPage(View):
     def get(self, request):
-        return render(request, 'landing_page.html')
+        if not request.user.is_authenticated:
+            return render(request, 'landing_page.html')
+        else:
+            return redirect('main/')
 
 
 class Analytics(LoginRequiredMixin, View):

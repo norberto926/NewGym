@@ -146,4 +146,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AUTH_USER_MODEL = 'WorkoutTracker.User'
 
 LOGIN_REDIRECT_URL = '/main'
-LOGOUT_REDIRECT_URL = '/landing'
+LOGOUT_REDIRECT_URL = '/'
