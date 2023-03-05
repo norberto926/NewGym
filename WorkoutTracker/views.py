@@ -11,10 +11,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from WorkoutTracker.database_population import populate_exercises_on_registration, populate_templates_on_registration
+from WorkoutTracker.database_population import populate_exercises_on_registration, populate_templates_on_registration, \
+    muscle_and_equipment_population
 from WorkoutTracker.filters import ExerciseFilter
 from WorkoutTracker.forms import ExerciseForm, WorkoutTemplateForm, SetFormWorkoutTemplate, SetFormWorkout, RegisterForm
-from WorkoutTracker.models import Exercise, Workout, WorkoutTemplate, Set, WorkoutExercise
+from WorkoutTracker.models import Exercise, Workout, WorkoutTemplate, Set, WorkoutExercise, Muscle
 
 
 # Create your views here.
@@ -102,6 +103,8 @@ class CreateUser(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            if Muscle.objects.all().count() == 0:
+                muscle_and_equipment_population()
             populate_exercises_on_registration(request)
             populate_templates_on_registration(request)
             return redirect('/main')

@@ -84,20 +84,20 @@ WSGI_APPLICATION = 'NewGym.wsgi.application'
 
 DATABASES = {
 
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': 'new_gym_db_5',
-
-        'USER': 'postgres',
-
-        'PASSWORD': config('DATABASE_PASSWORD'),
-
-        'HOST': 'localhost',
-
-    }
-    # 'default': dj_database_url.parse(config('RENDER_DATABASE_URL'))
+    # 'default': {
+    #
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #
+    #     'NAME': 'new_gym_db_5',
+    #
+    #     'USER': 'postgres',
+    #
+    #     'PASSWORD': config('DATABASE_PASSWORD'),
+    #
+    #     'HOST': 'localhost',
+    #
+    # }
+    'default': dj_database_url.parse(config('RENDER_DATABASE_URL'))
 
 }
 

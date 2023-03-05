@@ -1,5 +1,31 @@
 from .models import Exercise, Equipment, Muscle, Set, WorkoutExercise, Workout, WorkoutTemplate
 
+def muscle_and_equipment_population():
+    #Equipment
+    leg_press_machine = Equipment.objects.create(name='Leg Press machine')
+    hammer_chest_machine = Equipment.objects.create(name='Hammer Chest machine')
+    smith_machine = Equipment.objects.create(name='Smith machine')
+    fly_machine = Equipment.objects.create(name='Fly machine')
+    dip_pull_up_machine = Equipment.objects.create(name='Dip/Pull-up machine')
+    tricep_dip_bar = Equipment.objects.create(name='Tricep Dip bar')
+    exercise_atlas = Equipment.objects.create(name='Exercise Atlas')
+    pull_up_bar = Equipment.objects.create(name='Pull-up bar')
+    barbell = Equipment.objects.create(name='Barbell')
+    dumbells = Equipment.objects.create(name='Dumbells')
+    bench = Equipment.objects.create(name='Bench')
+    load = Equipment.objects.create(name='Load (more than bodyweight)')
+    #Muscle
+    chest = Muscle.objects.create(name="Chest")
+    upper_back = Muscle.objects.create(name="Upper back")
+    lower_back = Muscle.objects.create(name='Lower back')
+    shoulder = Muscle.objects.create(name='Shoulder')
+    quads = Muscle.objects.create(name='Quads')
+    glutes_hamstrings = Muscle.objects.create(name='Glutes and Hamstrings')
+    abdominal = Muscle.objects.create(name='Abdominal')
+    tricep = Muscle.objects.create(name='Tricep')
+    bicep = Muscle.objects.create(name='Bicep')
+    calves = Muscle.objects.create(name="Calves")
+
 
 def populate_exercises_on_registration(request):
 
