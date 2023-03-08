@@ -18,7 +18,7 @@ from django.urls import path, include
 from WorkoutTracker.views import CreateExercise, CreateWorkoutTemplate, MainPageView, edit_workout_template, \
     WorkoutTemplateList, ExerciseList, AddExercise, DeleteExercise, CreateWorkout, edit_workout, ArchiveTemplate, \
     WorkoutDetails, WorkoutList, CreateUser, DeleteWorkout, LandingPage, DeleteWorkoutExercise, Analytics, \
-    general_progression, exercise_progression, sets_per_muscle, totals
+    general_progression, exercise_progression, sets_per_muscle, totals, Preview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +37,7 @@ urlpatterns = [
     path('workout_details/<int:workout_pk>', WorkoutDetails.as_view(), name='workout_details'),
     path('workout_list', WorkoutList.as_view(), name='workout_list'),
     path('sign_up', CreateUser.as_view(), name='sign_up'),
+    path('preview', Preview.as_view(), name='preview'),
     path('delete_workout/<int:workout_pk>', DeleteWorkout.as_view(), name='delete_workout'),
     path('', LandingPage.as_view(), name='landing'),
     path('delete_exercise/<int:exercise_pk>', DeleteExercise.as_view(), name='delete_exercise'),

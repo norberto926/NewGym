@@ -13,16 +13,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-            <a class="nav-link text-secondary" href=""><strong>ABOUT</strong></a>
+            <a class="nav-link text-secondary" href="#features"><strong>FEATURES</strong></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-secondary"  href=""><strong>PROJECT</strong></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-secondary"  href=""><strong>TECHNOLOGIES</strong></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-secondary"  href=""><strong></strong></a>
+          <a class="nav-link text-secondary"  href="#about"><strong>ABOUT</strong></a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-secondary"  href="/login"><strong>LOGIN</strong></a>
@@ -56,14 +50,14 @@
     <h1 class="text-secondary">
         or
     </h1>
-    <a class="btn btn-lg btn-secondary" href="/sign_up"><strong>Login as a preview user</strong></a>
+    <a class="btn btn-lg btn-secondary" href="/preview"><strong>Login as a preview user</strong></a>
     </div>
     </div>
   </div>
 </div>
 </section>
 {#card section#}
-<section class="pt-5">
+<section class="pt-5" id="features">
 <div class="row py-5 justify-content-around gap-5">
     <div class="col-md-3">
         <div class="card" style="background-color: #0096c7">
@@ -107,15 +101,16 @@
 </div>
 </section>
 {# about section #}
-<section class="text-secondary pt-5">
+    <div style="height: 50px;"></div>
+<section class="text-secondary pt-5" id="about">
 <div class="d-flex justify-content-center">
-<h1 class="text-secondary display-2">About</h1>
+<h1 class="text-secondary display-1">About</h1>
 </div>
         <div class="row align-items-center py-5">
             <div class="d-none d-md-block col">
             <img class="img-fluid p-5 me-5" src="{% static 'WorkoutTracker/Screenshot2.png' %}">
             </div>
-            <div class='col ps-5'>
+            <div class='col p-4'>
             <p class="lead">
             <strong>
                 New Gym is my final project for Coderslab Python Developer Bootcamp. It has all functionalities of
@@ -124,26 +119,26 @@
 
             </strong>
             </p>
-                            <p class="lead text-justify">
+            <p class="lead text-justify pb-3">
             <strong>
                 Feel free to register as a new user and track your own workouts or login as a preview user
                 with just one click. Please bear in mind that the application and database is hosted on
-                <span class="text-secondary">render</span> a free hosting platform and it can take a few seconds to
-                perform an action.
+                <span class="fw-bold">render</span>, a free hosting platform and it can take a few seconds to
+                perform an action. <br>Please visit the github repository for more information about the project.
             </strong>
             </p>
-            <h1 class="text-center text-secondary pt-5" style="font-size: 40px"><strong>Technology stack</strong></h1>
-    <div class='row justify-content-around align-items-center text-secondary text-center' style="font-size: 24px">
+                <div class="d-flex justify-content-center">
+            <a class="btn btn-lg btn-secondary" href="https://github.com/norberto926/NewGym"><strong><i class="fa-brands fa-github fa-xl pe-3"></i>Github</strong></a>
+                    </div>
+            <h1 class="text-center text-secondary pt-5 pb-3"><strong>Technology stack</strong></h1>
+    <div class='row justify-content-around align-items-center text-secondary text-center gap-4' style="font-size: 24px">
         <div class="col-md"><i class="fa-brands fa-python fa-3x"></i></div>
         <div class="col-md"><i class="fa-brands fa-js fa-3x"></i></div>
         <div class="col-md"><i class="fa-brands fa-mdb fa-3x"></i></div>
         <div class="col-md"><img class="img-fluid w-50" src="{% static 'WorkoutTracker/postgresql .png' %}"></div>
         <div class="col-md"><img class="img-fluid w-75" src="{% static 'WorkoutTracker/django.ico' %}"></div>
     </div>
-            </div>
-        </div>
+    </div>
+    </div>
 </section>
-{#  #}
-
-
 {% endblock %}

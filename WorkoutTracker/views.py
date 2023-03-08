@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.views import View
@@ -398,6 +399,12 @@ class LandingPage(View):
             return render(request, 'landing_page.html')
         else:
             return redirect('main/')
+
+class Preview(View):
+    def get(self, request):
+        test_user = User.objects.get(username='test_user')
+        login(request, test_user)
+        return redirect('main/')
 
 
 class Analytics(LoginRequiredMixin, View):
