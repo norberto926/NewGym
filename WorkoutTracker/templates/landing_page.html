@@ -34,27 +34,33 @@
 {% endblock %}
 {% block content %}
 {# hero section #}
-<section class="text-light mb-2" style="background-color: #0096c7">
-        <div class="row align-items-center py-5">
-            <div class="col">
-            <img class="img-fluid p-5 ms-5" src="{% static 'WorkoutTracker/hero5.png' %}">
-            </div>
-            <div class='col me-5 p-5 text-center'>
-            <h2 class="text-secondary mb-5 display-1" style="font-size: 70px"><strong>Workout smart</strong></h2>
-            <p class="lead text-justify">
-            <strong>
-                    Are you tired of keeping track of your workouts on paper or in a disorganized spreadsheet?
-                    Do you want a convenient and easy way to monitor your progress and reach your fitness goals?
-                    Introducing the ultimate workout tracker application!
-            </strong>
-            </p>
-            <a class="btn btn-lg btn-secondary w-50 my-5" href="/sign_up"><strong>Try it out!</strong></a>
-            </div>
-        </div>
-</section>
-{# pitch #}
 <section>
-
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+        .bg-image-link{
+    background-image: url('{% static 'WorkoutTracker/luis-reyes-mTorQ9gFfOg-unsplash.jpg' %}');
+    height: 80vh;
+        }
+    </style>
+<div class="bg-image bg-image-link text-center">
+      <div class="mask row justify-content-center p-0 m-0 w-100 overflow-hidden" style="background-color: rgba(0, 150, 199, 0.7)" >
+    <div class="col col-md-7 d-flex flex-column justify-content-center align-items-center h-100 gap-5">
+    <h1 class="text-secondary logo mt-3 display-1"><strong>NEW GYM</strong></h1>
+    <h1 class="text-secondary display-5">
+        Log your gym workouts and track your progress using data visualization.
+    </h1>
+    <div class="d-sm-flex w-md-50 justify-content-between gap-5 align-items-center">
+    <a class="btn btn-lg text-nowrap btn-secondary" href="/sign_up"><strong>Register as a new user</strong></a>
+    <h1 class="text-secondary">
+        or
+    </h1>
+    <a class="btn btn-lg btn-secondary" href="/sign_up"><strong>Login as a preview user</strong></a>
+    </div>
+    </div>
+  </div>
+</div>
 </section>
 {#card section#}
 <section class="p-5">

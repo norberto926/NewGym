@@ -92,7 +92,7 @@
 <div class="container-fluid py-5">
 {% if unfinished_workouts %}
     <div class="row justify-content-center">
-        <div class="col-lg-6 mt-5 p-5">
+        <div class="col col-lg-6 mt-5 p-5">
         <div class="container rounded-4 p-3 shadow-5-strong text-light border border-secondary border-5 text-center" id="workout_container" style="background-color:#0096c7">
         <h3 class="text-secondary pb-3"><strong>YOU HAVE UNFINISHED WORKOUTS/TEMPLATES</strong></h3>
             {% for workout in unfinished_workouts %}
@@ -109,7 +109,7 @@
 {% endif %}
     <div class="row justify-content-center">
     {% if last_workout %}
-        <div class="col-lg-6 mt-4 p-5">
+        <div class="col col-lg-6 mt-4 p-lg-5">
             {% with 'LAST WORKOUT' as headline%}
             {% with last_workout as workout %}
             {% with last_workout_dict as workout_dict %}
