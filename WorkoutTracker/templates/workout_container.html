@@ -19,12 +19,12 @@
         </div>
         <hr class="hr-blurry"/>
         <div class="row justify-content-around">
-            <div class="col-12 col-md-4">
+            <div class="col col-md-4">
                 <div class="py-2 text-secondary"><i class="fa-solid fa-calendar-days fa-2xl pe-3 ps-1 text-secondary"></i> <strong>{{ workout.created|date:'d M Y' }} </strong></div>
                 <div class="py-2 text-secondary"><i class="fa-solid fa-dumbbell fa-2xl pe-2 text-secondary"></i><strong>   Exercises: {{ workout_dict.items|length }}</strong></div>
                 <div class="py-2 text-secondary"><i class="fa-solid fa-stopwatch-20 fa-2xl ps-1 pe-3 text-secondary"></i> <strong>Sets: {{ workout_totals.0 }}</strong></div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col col-md-4">
                 <div class="py-2 text-secondary"><i class="fa-solid fa-arrows-rotate fa-2xl pe-2 text-secondary"></i> <strong>Repetitions: {{ workout_totals.1 }}</strong></div>
                 <div class="py-2 text-secondary"><i class="fa-solid fa-weight-hanging fa-2xl pe-2 text-secondary"></i> <strong>Total load: {{ workout_totals.2 }} kg</strong></div>
             </div>
@@ -38,8 +38,8 @@
 
             <div class="row pb-1 justify-content-between">
                 <div class="col-2"><strong>SETS</strong></div>
-                <div class="col-3"><strong>REPETITIONS</strong></div>
-                <div class="col-3"><strong>LOAD</strong></div>
+                <div class="col-3"><strong>REPS</strong></div>
+                <div class="col-4"><strong>LOAD</strong></div>
             </div>
             {% for set in sets %}
                 <div class="row justify-content-between">
@@ -49,7 +49,7 @@
                     <div class="col-3">
                         {{ set.repetitions }}
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                         {{ set.load }} kg
                     </div>
                 </div>

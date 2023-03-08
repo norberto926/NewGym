@@ -22,7 +22,7 @@ class ExerciseForm(forms.ModelForm):
 
 
 class WorkoutTemplateForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control w-75 text-light bg-secondary', 'style':'text-align:center;'}), label='')
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control text-light bg-secondary', 'style':'text-align:center;'}), label='')
 
     class Meta:
         model = WorkoutTemplate
@@ -34,7 +34,7 @@ class AddExerciseForm(forms.Form):
 
 
 class SetFormWorkoutTemplate(forms.ModelForm):
-    repetitions = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
+    repetitions = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control text-light bg-secondary', 'style': 'text-align:center;'}), label='')
 
     class Meta:
         model = Set
@@ -42,8 +42,8 @@ class SetFormWorkoutTemplate(forms.ModelForm):
 
 
 class SetFormWorkout(forms.ModelForm):
-    load = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
-    repetitions = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control w-50 text-light bg-secondary', 'style': 'text-align:center;'}), label='')
+    load = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-control text-light bg-secondary', 'style': 'text-align:center;'}), label='')
+    repetitions = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control text-light bg-secondary', 'style': 'text-align:center;'}), label='')
     done = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input text-light bg-secondary'}))
 
     class Meta:
