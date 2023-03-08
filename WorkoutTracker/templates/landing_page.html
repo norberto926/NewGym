@@ -63,43 +63,43 @@
 </div>
 </section>
 {#card section#}
-<section class="p-5">
-<div class="row text-center gap-4">
-    <div class="col-md m-5">
+<section class="pt-5">
+<div class="row py-5 justify-content-around gap-5">
+    <div class="col-md-3">
         <div class="card" style="background-color: #0096c7">
             <div class="card-body text-center">
-                <i class="fa-sharp fa-regular fa-user text-secondary fa-7x pb-4"></i>
-                <h3 class="card-title text-light pb-4"><strong>User friendly</strong></h3>
+                <i class="fa-solid fa-regular fa-dumbbell text-secondary fa-7x pb-4"></i>
+                <h3 class="card-title pb-4 text-secondary"><strong>Exercises</strong></h3>
                 <p class="card-text text-light">
-                    Our app features a user-friendly interface that makes tracking your workouts a breeze.
-                    You can easily create workout routines and customize them to your liking.
-                    You can also log the sets, reps, and weight lifted for each exercise.
+                    The exercises menu lets you easily filter through the exercise database based on
+                    the equipment you have, muscle you want to train or just by typing the name of the exercise.
+                    You can also add you own exercises!
                 </p>
             </div>
         </div>
     </div>
-    <div class="col-md m-5">
+    <div class="col-md-3">
         <div class="card" style="background-color: #0096c7">
             <div class="card-body text-center">
                 <i class="fa-sharp fa-regular fa-clipboard text-secondary fa-7x pb-4"></i>
-                <h3 class="card-title text-light pb-4"><strong>Ready to use</strong></h3>
+                <h3 class="card-title pb-4 text-secondary"><strong>Templates</strong></h3>
                 <p class="card-text text-light">
-                    You can use one of our built-in workout templates based on some of the most popular plans in the fitness world like
-                    Full Body Workout, Push/Pull/Legs or classic 3-day Split.
-                    Build your own templates with over 50 exercises form the Exercise Atlas.
+                    You can use one of the built-in workout templates or create your own.
+                    Before your workout pick a template and if you have previously used it, the app will automatically
+                    upload the last workout data into the form, so you can easily progress.
                 </p>
             </div>
         </div>
     </div>
-    <div class="col-md m-5">
+    <div class="col-md-3">
         <div class="card" style="background-color: #0096c7">
             <div class="card-body text-center">
                 <i class="fa-solid fa-chart-line text-secondary fa-7x pb-4"></i>
-                <h3 class="card-title text-light pb-4"><strong>Advanced Analytics</strong></h3>
+                <h3 class="card-title pb-4 text-secondary"><strong>Analytics</strong></h3>
                 <p class="card-text text-light">
-                    The app also provides detailed analytics and progress reports,
-                    allowing you to see how far you've come and identify areas for improvement.
-                    You can also set goals for yourself and track your progress towards achieving them.
+                    The analytics dashboard lets you easily track your progress. The dynamic filtering lets you
+                    change the training period you want to analyze, look at workouts with a specific template or
+                    progress of a specific exercise.
                 </p>
             </div>
         </div>
@@ -107,32 +107,43 @@
 </div>
 </section>
 {# about section #}
-<section class="text-secondary">
-        <div class="row align-items-center py-5 text-center">
-            <div class="col">
+<section class="text-secondary pt-5">
+<div class="d-flex justify-content-center">
+<h1 class="text-secondary display-2">About</h1>
+</div>
+        <div class="row align-items-center py-5">
+            <div class="d-none d-md-block col">
             <img class="img-fluid p-5 me-5" src="{% static 'WorkoutTracker/Screenshot2.png' %}">
             </div>
             <div class='col ps-5'>
-            <p class="lead text-justify">
+            <p class="lead">
             <strong>
-                This is my final fullstack project for Coderslab Python Developer Bootcamp
-                with Python/Django backend and Javascript ES6 and Material Design Bootstrap on the frontend.
-                This app lets you log your workout based on previously created template. You can try it out by simply
-                clicking login with the initial username and password.
+                New Gym is my final project for Coderslab Python Developer Bootcamp. It has all functionalities of
+                a commercial workout tracker application. The database, backend and frontend is my original design.
+                The project reflects my passion for strength training and showcase my data analysis skillset.
+
             </strong>
             </p>
-            <a class="btn btn-lg btn-secondary w-50 my-5" href="/sign_up"><strong>Try it out!</strong></a>
+                            <p class="lead text-justify">
+            <strong>
+                Feel free to register as a new user and track your own workouts or login as a preview user
+                with just one click. Please bear in mind that the application and database is hosted on
+                <span class="text-secondary">render</span> a free hosting platform and it can take a few seconds to
+                perform an action.
+            </strong>
+            </p>
             <h1 class="text-center text-secondary pt-5" style="font-size: 40px"><strong>Technology stack</strong></h1>
     <div class='row justify-content-around align-items-center text-secondary text-center' style="font-size: 24px">
         <div class="col-md"><i class="fa-brands fa-python fa-3x"></i></div>
         <div class="col-md"><i class="fa-brands fa-js fa-3x"></i></div>
         <div class="col-md"><i class="fa-brands fa-mdb fa-3x"></i></div>
-        <div class="col-md"><img class="img-fluid" src="{% static 'WorkoutTracker/postgresql .png' %}"></div>
-        <div class="col-md"><img class="img-fluid" src="{% static 'WorkoutTracker/django.ico' %}"></div>
+        <div class="col-md"><img class="img-fluid w-50" src="{% static 'WorkoutTracker/postgresql .png' %}"></div>
+        <div class="col-md"><img class="img-fluid w-75" src="{% static 'WorkoutTracker/django.ico' %}"></div>
     </div>
             </div>
         </div>
 </section>
+{#  #}
 
 
 {% endblock %}
