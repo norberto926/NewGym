@@ -1,6 +1,8 @@
+![hero](/Screenshots/Screenshot from 2023-03-10 14-51-30.png)
 # NewGym
-> Log your gym workouts and track your progress using data visualization.
-> https://new-gym.onrender.com/.
+Log your gym workouts and track your progress using data visualization.
+
+https://new-gym.onrender.com/.
 
 ## Table of Contents
 * [General Info](#general-information)
