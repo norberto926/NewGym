@@ -1,6 +1,6 @@
 # NewGym
 > Log your gym workouts and track your progress using data visualization.
-> Live demo [_here_]([https://www.example.com](https://new-gym.onrender.com/)).
+> https://new-gym.onrender.com/.
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -13,7 +13,6 @@
 * [Room for Improvement](#room-for-improvement)
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
-<!-- * [License](#license) -->
 
 
 ## General Information
@@ -31,7 +30,6 @@ Feel free to register as a new user and track your own workouts or login as a pr
 
 
 ## Features
-List the ready features here:
 - Exercises
 The exercises menu lets you easily filter through the exercise database based on the equipment you have, muscle you want to train or just by typing the name of the exercise. You can also add you own exercises!
 - Templates
