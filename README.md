@@ -53,7 +53,7 @@ To run the project on your machine please install all requirements in a virtual 
 ## Usage
 To register as a new user please enter your username and password, the username must be unique and the password requeirements are stated at the registration form. There is no password recovery system implemented at this moment. Plsease be awere that the current databse hosting platform offers only 3 months of database existance so your data will be erased on 06.06.2023. 
 
--Workout
+- Workout
 
 To create a new workout please enter the "New workout" menu item and pick a template on which the workout should be based on. The template must be created beforehand. The data for the new workout form will be automatically filled out to make it easier to add progression to your training. The data will be resetet (load = 0 for each set) if one of three thing happened earlier:
 - user edited the template
@@ -61,13 +61,13 @@ To create a new workout please enter the "New workout" menu item and pick a temp
 
 In your workout form you should edit every set as ypu progress through your workout. It is important to check the "done" checkbox as this is the condition needed for the set to save. After all sets of the workout are done click the save button at the botton of the form, you will be redirected to the workout details page to see the workout summary and make changes if something is wrong.
 
--Templates
+- Templates
 
 The templates manu lets you look wthrough all your workouts templates, edit, delete them and create new ones.
 
 Before creating a template check if all desired exercises are already in the database using the Exercise manu item. If not you can easily create new ones.
 
--Analytics
+- Analytics
 
 The analytics menu items lets you track your progress, right now the metric that is used in the general Progression Chart and Exercise Progression Chart is total load (every repetiotion times load of every set summed per workout). In the future there should be improvement in this area such as avg load per set in the Exercise progression Chart.
 
