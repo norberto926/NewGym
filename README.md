@@ -81,9 +81,9 @@ The data filters are global changing the dataset for every chart.
 ## Project Status
 The project is already a working applications but it still needs improvement/new features in some areas.
 To do:
--more parameters and charts in the analytics section
--better responsivnsess for mobile devices
--workout history as a calendar page
+- more parameters and charts in the analytics section
+- better responsivnsess for mobile devices
+- workout history as a calendar page
 
 If you want to contribute please feel free to fork the repository, make changes and create a pull request.
 
