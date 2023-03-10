@@ -39,7 +39,7 @@ The analytics dashboard lets you easily track your progress. The dynamic filteri
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+![New workout](/Screenshots/new_workout.png)
 <!-- If you have screenshots you'd like to share, include them here. -->
 
 
