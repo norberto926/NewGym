@@ -40,20 +40,30 @@ The analytics dashboard lets you easily track your progress. The dynamic filteri
 
 ## Screenshots
 ![New workout](/Screenshots/new_workout.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+![Workout details](/Screenshots/workout_details.png)
+![Analytics](/Screenshots/analytics.png)
+![Analytics filters](/Screenshots/analytics_filters.png)
+![Exercises](/Screenshots/exercises.png)
+![Workout History](/Screenshots/workout-history.png)
+
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
-Proceed to describe how to install / setup one's local environment / get started with the project.
+To run the project on your machine please install all requirements in a virtual environment from requirements.txt file in the main project folder. Then run a local server on your machine using the manage.py runserver commnad from the terminal.
 
 
 ## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
+To register as a new user please enter your username and password, the username must be unique and the password requeirements are stated at the registration form. There is no password recovery system implemented at this moment. Plsease be awere that the current databse hosting platform offers only 3 months of database existance so your data will be erased on 06.06.2023. 
 
-`write-your-code-here`
+To create a new workout please enter the "New workout" menu item and pick a template on which the workout should be based on. The template must be created beforehand. The data for the new workout form will be automatically filled out to make it easier to add progression to your training. The data will be resetet (load = 0 for each set) if one of three thing happened earlier:
+- user edited the template
+- last workout user has not completed all sets prepared for the workout
+
+In your workout form you should edit every set as ypu progress through your workout. It is important to check the "done" checkbox as this is the condition needed for the set to save. After all sets of the workout are done click the save button at the botton of the form, you will be redirected to the workout details page to see the workout summary and make changes if something is wrong.
+
+The templates manu lets you look wthrough all your workouts templates, edit, delete them and create new ones.
+
+Before creating a template check if all desired exercises are already in the database using the Exercise manu item. If not you can easily create new ones.
 
 
 ## Project Status
