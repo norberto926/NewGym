@@ -44,7 +44,7 @@ The analytics dashboard lets you easily track your progress. The dynamic filteri
 ![Analytics](/Screenshots/analytics.png)
 ![Analytics filters](/Screenshots/analytics_filters.png)
 ![Exercises](/Screenshots/exercises.png)
-![Workout History](/Screenshots/workout-history.png)
+![Workout History](/Screenshots/workout_history.png)
 
 
 
@@ -55,46 +55,39 @@ To run the project on your machine please install all requirements in a virtual 
 ## Usage
 To register as a new user please enter your username and password, the username must be unique and the password requeirements are stated at the registration form. There is no password recovery system implemented at this moment. Plsease be awere that the current databse hosting platform offers only 3 months of database existance so your data will be erased on 06.06.2023. 
 
+-Workout
+
 To create a new workout please enter the "New workout" menu item and pick a template on which the workout should be based on. The template must be created beforehand. The data for the new workout form will be automatically filled out to make it easier to add progression to your training. The data will be resetet (load = 0 for each set) if one of three thing happened earlier:
 - user edited the template
 - last workout user has not completed all sets prepared for the workout
 
 In your workout form you should edit every set as ypu progress through your workout. It is important to check the "done" checkbox as this is the condition needed for the set to save. After all sets of the workout are done click the save button at the botton of the form, you will be redirected to the workout details page to see the workout summary and make changes if something is wrong.
 
+-Templates
+
 The templates manu lets you look wthrough all your workouts templates, edit, delete them and create new ones.
 
 Before creating a template check if all desired exercises are already in the database using the Exercise manu item. If not you can easily create new ones.
 
+-Analytics
+
+The analytics menu items lets you track your progress, right now the metric that is used in the general Progression Chart and Exercise Progression Chart is total load (every repetiotion times load of every set summed per workout). In the future there should be improvement in this area such as avg load per set in the Exercise progression Chart.
+
+The Analytics Menu is a SPA (sigle page application) communicating by REST API with the backend (using Javascript on the frontend with Chart.js as a data visualization library and Django Rest Framework as a tool for building API backend endpoints.
+
+The data filters are global changing the dataset for every chart.
+
 
 ## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
-
-
-## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
-
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
-
+The project is already a working applications but it still needs improvement/new features in some areas.
 To do:
-- Feature to be added 1
-- Feature to be added 2
+-more parameters and charts in the analytics section
+-better responsivnsess for mobile devices
+-workout history as a calendar page
 
-
-## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
+If you want to contribute please feel free to fork the repository, make changes and create a pull request.
 
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by Norbert Gniadek - feel free to contact me!
 
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
