@@ -1,4 +1,4 @@
-![hero](/Screenshots/Screenshot from 2023-03-10 14-51-30.png)
+![hero](/Screenshots/hero.png)
 # NewGym
 Log your gym workouts and track your progress using data visualization.
 
